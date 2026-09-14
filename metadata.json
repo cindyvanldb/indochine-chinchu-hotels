@@ -1,0 +1,8 @@
+{
+  "name": "Indochine Casa & Chinchu Hotels Thảo Điền",
+  "description": "Đặt phòng khách sạn Indochine Casa Hotel, Chinchu Luxury Hotel & Chinchu Stay tại Thảo Điền - An Khánh, TP. Hồ Chí Minh. Giá trực tiếp ưu đãi tốt nhất, gần Metro và trung tâm.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
