@@ -224,7 +224,7 @@ export const DirectBookingModal: React.FC<DirectBookingModalProps> = ({
                 </p>
               </div>
               <img
-                src={getAssetUrl('/logo-indochine.png')}
+                src={getAssetUrl('/assets/logo-indochine.png')}
                 alt="Indochine Casa Logo"
                 className="h-8 w-auto max-w-[70px] object-contain shrink-0 hidden sm:block"
               />
@@ -302,7 +302,7 @@ export const DirectBookingModal: React.FC<DirectBookingModalProps> = ({
                 </p>
               </div>
               <img
-                src={getAssetUrl('/logo-chinchu.png')}
+                src={getAssetUrl('/assets/logo-chinchu.png')}
                 alt="Chinchu Logo"
                 className="h-8 w-auto max-w-[50px] object-contain shrink-0 hidden sm:block"
               />

@@ -46,7 +46,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({
     whatsappDisplay: '+84 708 570 838',
     whatsappUrl: 'https://wa.me/84708570838',
     wechatId: '0708570838',
-    logo: getAssetUrl('/logo-indochine.png'),
+    logo: getAssetUrl('/assets/logo-indochine.png'),
   };
 
   const chinchuContact = {
@@ -59,7 +59,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({
     whatsappDisplay: '+84 966 572 935',
     whatsappUrl: 'https://wa.me/84966572935',
     wechatId: '0966572935',
-    logo: getAssetUrl('/logo-chinchu.png'),
+    logo: getAssetUrl('/assets/logo-chinchu.png'),
   };
 
   const handleCopy = (id: string, text: string) => {

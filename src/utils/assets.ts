@@ -15,7 +15,10 @@ export function getAssetUrl(path?: string | null): string {
   const baseUrl = import.meta.env.BASE_URL || '/';
   const normalizedBase = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
 
-  // If path already starts with baseUrl, avoid duplicate prefix
+  // If path already starts with normalizedBase or baseUrl, avoid duplicate prefix
+  if (path.startsWith(normalizedBase)) {
+    return path;
+  }
   if (baseUrl !== '/' && path.startsWith(baseUrl)) {
     return path;
   }

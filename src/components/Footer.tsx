@@ -108,14 +108,14 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 bg-white rounded-2xl p-2 border border-stone-700 shadow-md shrink-0">
                 <img
-                  src={getAssetUrl('/logo-indochine.png')}
+                  src={getAssetUrl('/assets/logo-indochine.png')}
                   alt="Logo Indochine Casa Hotel"
                   className="h-8 sm:h-9 w-auto max-w-[85px] object-contain"
                   title="Indochine Casa Hotel"
                 />
                 <div className="w-px h-6 bg-stone-300" />
                 <img
-                  src={getAssetUrl('/logo-chinchu.png')}
+                  src={getAssetUrl('/assets/logo-chinchu.png')}
                   alt="Logo Chinchu"
                   className="h-8 sm:h-9 w-auto max-w-[55px] object-contain"
                   title="Chinchu Luxury & Stay"
