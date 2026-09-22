@@ -15,7 +15,7 @@ export const WhyBookDirect: React.FC<WhyBookDirectProps> = ({
     vi: {
       badge: 'Đặc Quyền Khách Hàng Đặt Trực Tiếp',
       title: 'Vì Sao Quý Khách Nên Liên Hệ Đặt Phòng Trực Tiếp Tại Hotline / Zalo?',
-      subtitle: 'Tận hưởng mức giá ưu đãi tốt nhất (chỉ từ 600.000đ - 800.000đ/đêm) cùng dịch vụ chăm sóc khách hàng cá nhân hóa 24/7 từ đội ngũ lễ tân chuyên nghiệp.',
+      subtitle: 'Tận hưởng mức giá ưu đãi tốt nhất cùng dịch vụ chăm sóc khách hàng 24/7 từ đội ngũ lễ tân chuyên nghiệp.',
       cta: 'Gọi Hotline Đặt Phòng Trực Tiếp 24/7',
       perks: [
         {
@@ -91,7 +91,7 @@ export const WhyBookDirect: React.FC<WhyBookDirectProps> = ({
     ko: {
       badge: '공식 직영 예약 고객 특전',
       title: '공식 핫라인 및 Zalo로 직접 예약해야 하는 이유',
-      subtitle: '1박 600,000동 ~ 700,000동의 최저가 보장과 함께 전문 프런트 팀의 24시간 맞춤형 호스피탈리티 서비스를 누려보세요.',
+      subtitle: '공식 직영 최저가 혜택과 함께 전문 프런트 팀의 24시간 맞춤형 호스피탈리티 서비스를 누려보세요.',
       cta: '24시간 핫라인 전화로 바로 예약하기',
       perks: [
         {
@@ -129,7 +129,7 @@ export const WhyBookDirect: React.FC<WhyBookDirectProps> = ({
     zh: {
       badge: '官方直接预订专属特权',
       title: '为什么建议您通过官方热线 / Zalo 直接联系预订？',
-      subtitle: '尊享每晚 600,000 - 700,000 越南盾起的全网最低直订价，以及专业前台团队提供的 24 小时贴心管家式服务。',
+      subtitle: '尊享全网最优官方直订特惠底价，以及专业前台团队提供的 24 小时贴心管家式服务。',
       cta: '致电 24 小时前台热线直订',
       perks: [
         {
