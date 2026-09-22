@@ -244,9 +244,8 @@ const INDOCHINE_PHOTOS: GalleryPhoto[] = [
   },
 ];
 
-// Reference photos for Chinchu (46 Nguyễn Cừ & 24 Xuân Thủy)
-const CHINCHU_PHOTOS: GalleryPhoto[] = [
-  // Cơ sở 46 Nguyễn Cừ (Chinchu Luxury)
+// 3 reference photos for Chinchu Luxury (46 Nguyễn Cừ)
+const CHINCHU_LUXURY_PHOTOS: GalleryPhoto[] = [
   {
     url: '/assets/chinchu/toan-canh-46nc.png',
     title: {
@@ -295,8 +294,10 @@ const CHINCHU_PHOTOS: GalleryPhoto[] = [
     },
     category: 'room',
   },
+];
 
-  // Cơ sở 24 Xuân Thủy (Chinchu Stay)
+// 13 reference photos for Chinchu Stay (24 Xuân Thủy)
+const CHINCHU_STAY_PHOTOS: GalleryPhoto[] = [
   {
     url: '/assets/chinchu/sanh-cc-xt-1.png',
     title: {
@@ -520,6 +521,8 @@ interface RoomCatalogProps {
   onOpenWeChat?: (branch?: 'indochine' | 'chinchu') => void;
 }
 
+type FacilityId = 'indochine' | 'chinchu-luxury' | 'chinchu-stay';
+
 export const RoomCatalog: React.FC<RoomCatalogProps> = ({
   language,
   onFilterChange,
@@ -529,40 +532,49 @@ export const RoomCatalog: React.FC<RoomCatalogProps> = ({
   onOpenWeChat,
 }) => {
   const currentHotelId = selectedHotelId || selectedHotelFilter || 'indochine-casa';
-  const [activeFacility, setActiveFacility] = useState<'indochine' | 'chinchu'>(
-    currentHotelId === 'indochine-casa' ? 'indochine' : 'chinchu'
+
+  const getInitialFacility = (hotelId: string): FacilityId => {
+    if (hotelId === 'chinchu-luxury') return 'chinchu-luxury';
+    if (hotelId === 'chinchu-stay') return 'chinchu-stay';
+    return 'indochine';
+  };
+
+  const [activeFacility, setActiveFacility] = useState<FacilityId>(
+    getInitialFacility(currentHotelId)
   );
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [filterCategory, setFilterCategory] = useState<'all' | 'room' | 'space'>('all');
 
   useEffect(() => {
-    if (currentHotelId === 'indochine-casa') {
-      setActiveFacility('indochine');
-    } else {
-      setActiveFacility('chinchu');
-    }
+    setActiveFacility(getInitialFacility(currentHotelId));
   }, [currentHotelId]);
 
-  const allPhotos = activeFacility === 'indochine' ? INDOCHINE_PHOTOS : CHINCHU_PHOTOS;
+  const allPhotos =
+    activeFacility === 'indochine'
+      ? INDOCHINE_PHOTOS
+      : activeFacility === 'chinchu-luxury'
+      ? CHINCHU_LUXURY_PHOTOS
+      : CHINCHU_STAY_PHOTOS;
+
   const filteredPhotos = allPhotos.filter((p) => {
     if (filterCategory === 'all') return true;
     return p.category === filterCategory;
   });
-
-  const isIndochine = activeFacility === 'indochine';
 
   const translations = {
     vi: {
       badge: 'Ảnh Thực Tế Tham Khảo',
       title: 'Hình Ảnh Thực Tế Cơ Sở Khách Sạn',
       subtitle:
-        'Tất cả hình ảnh thực tế nguyên bản tại cơ sở để quý khách tham khảo không gian phòng khi bấm vào xem. Mức giá cơ sở chỉ từ 600.000đ / đêm.',
+        'Tất cả hình ảnh thực tế nguyên bản tại cơ sở để quý khách tham khảo không gian phòng khi bấm vào xem.',
       indochineName: 'INDOCHINE CASA HOTEL',
-      indochineSub: '04 Thái Ly • Giá chỉ từ 600.000đ / đêm',
-      chinchuName: 'CHINCHU (LUXURY & STAY)',
-      chinchuSub: '46 Nguyễn Cừ & 24 Xuân Thủy • Giá từ 600.000đ / đêm',
+      indochineSub: '04 Thái Ly',
+      chinchuLuxuryName: 'CHINCHU LUXURY HOTEL',
+      chinchuLuxurySub: '46 Nguyễn Cừ',
+      chinchuStayName: 'CHINCHU STAY',
+      chinchuStaySub: '24 Xuân Thủy',
       photosCount: 'ảnh',
-      priceHint: 'Giá lưu trú theo đêm: Chỉ từ 600.000đ / đêm',
+      verifiedBadge: '100% Ảnh thực tế • Lễ tân 24/7',
       callReception: 'Gọi Lễ Tân',
       zalo: 'Zalo',
       amenity1: 'Đệm êm & Ga cotton thay mới 100%',
@@ -590,13 +602,15 @@ export const RoomCatalog: React.FC<RoomCatalogProps> = ({
       badge: 'Authentic Reference Photos',
       title: 'Authentic Hotel & Room Photos',
       subtitle:
-        'Unfiltered, 100% authentic reference photography showcasing real guest rooms, lobbies, and spaces. Rates start from 600,000 VND / night.',
+        'Unfiltered, 100% authentic reference photography showcasing real guest rooms, lobbies, and spaces.',
       indochineName: 'INDOCHINE CASA HOTEL',
-      indochineSub: '04 Thai Ly • From 600,000 VND / night',
-      chinchuName: 'CHINCHU (LUXURY & STAY)',
-      chinchuSub: '46 Nguyen Cu & 24 Xuan Thuy • From 600,000 VND',
+      indochineSub: '04 Thai Ly',
+      chinchuLuxuryName: 'CHINCHU LUXURY HOTEL',
+      chinchuLuxurySub: '46 Nguyen Cu',
+      chinchuStayName: 'CHINCHU STAY',
+      chinchuStaySub: '24 Xuan Thuy',
       photosCount: 'photos',
-      priceHint: 'Nightly rates: From 600,000 VND / night',
+      verifiedBadge: '100% Authentic Photos • 24/7 Concierge',
       callReception: 'Call Desk',
       zalo: 'Zalo',
       amenity1: 'Orthopedic Bed & 100% Fresh Cotton Linens',
@@ -624,13 +638,15 @@ export const RoomCatalog: React.FC<RoomCatalogProps> = ({
       badge: '실제 현장 실사 갤러리',
       title: '호텔 및 객실 100% 무보정 실제 사진',
       subtitle:
-        '투숙객 여러분의 신뢰를 위해 필터 없는 실제 객실과 로비 공간을 있는 그대로 안내해 드립니다. 1박 최저 600,000동부터.',
+        '투숙객 여러분의 신뢰를 위해 필터 없는 실제 객실과 로비 공간을 있는 그대로 안내해 드립니다.',
       indochineName: '인도차이나 카사 호텔',
-      indochineSub: '04 Thai Ly • 1박 600,000동부터',
-      chinchuName: '친추 호텔 (럭셔리 & 스테이)',
-      chinchuSub: '46 Nguyen Cu & 24 Xuan Thuy • 600,000동부터',
+      indochineSub: '04 Thai Ly',
+      chinchuLuxuryName: '친추 럭셔리 호텔',
+      chinchuLuxurySub: '46 Nguyen Cu',
+      chinchuStayName: '친추 스테이',
+      chinchuStaySub: '24 Xuan Thuy',
       photosCount: '장',
-      priceHint: '1박 숙박 요금: 최저 600,000동부터',
+      verifiedBadge: '100% 무보정 실사 • 24시간 프런트',
       callReception: '프런트 전화',
       zalo: 'Zalo 상담',
       amenity1: '포근한 침대 & 100% 순면 교체 침구',
@@ -658,13 +674,15 @@ export const RoomCatalog: React.FC<RoomCatalogProps> = ({
       badge: '现场实景真实参考',
       title: '酒店外观与客房 100% 真实实拍',
       subtitle:
-        '所有图片均为分店现场真实无滤镜实景拍摄，直观展示客房细节、卫浴及接待大堂。每晚房价仅 600,000 越南盾起。',
+        '所有图片均为分店现场真实无滤镜实景拍摄，直观展示客房细节、卫浴及接待大堂。',
       indochineName: 'INDOCHINE CASA 酒店',
-      indochineSub: '04 Thai Ly • 每晚仅 600,000 越南盾起',
-      chinchuName: 'CHINCHU 酒店（轻奢 & 活力公寓）',
-      chinchuSub: '46 Nguyen Cu & 24 Xuan Thuy • 600,000 盾起',
+      indochineSub: '蔡莉街04号',
+      chinchuLuxuryName: 'CHINCHU LUXURY 酒店',
+      chinchuLuxurySub: '阮渠街46号',
+      chinchuStayName: 'CHINCHU STAY',
+      chinchuStaySub: '春水街24号',
       photosCount: '张',
-      priceHint: '每晚住宿价格：仅 600,000 越南盾起',
+      verifiedBadge: '100% 真实实景拍摄 • 24小时前台',
       callReception: '致电前台',
       zalo: 'Zalo 在线',
       amenity1: '减压舒适床垫 & 100% 全新纯棉床品',
@@ -692,25 +710,36 @@ export const RoomCatalog: React.FC<RoomCatalogProps> = ({
 
   const t = translations[language] || translations.vi;
 
-  const currentFacilityInfo = isIndochine
-    ? {
-        name: 'INDOCHINE CASA HOTEL',
-        address: '04 Thái Ly, Phường Thảo Điền, TP. Thủ Đức, TP. HCM',
-        phone: '+84 708 570 838',
-        phoneHref: 'tel:+84708570838',
-        zaloHref: 'https://zalo.me/0708570838',
-        whatsappHref: 'https://wa.me/84708570838',
-        branch: 'indochine' as const,
-      }
-    : {
-        name: 'CHINCHU HOTEL & STAY',
-        address: '46 Nguyễn Cừ & 24 Xuân Thủy, Phường Thảo Điền, TP. Thủ Đức, TP. HCM',
-        phone: '+84 966 572 935',
-        phoneHref: 'tel:+84966572935',
-        zaloHref: 'https://zalo.me/0966572935',
-        whatsappHref: 'https://wa.me/84966572935',
-        branch: 'chinchu' as const,
-      };
+  const currentFacilityInfo =
+    activeFacility === 'indochine'
+      ? {
+          name: 'INDOCHINE CASA HOTEL',
+          address: '04 Thái Ly, Phường Thảo Điền, TP. Thủ Đức, TP. HCM',
+          phone: '+84 708 570 838',
+          phoneHref: 'tel:+84708570838',
+          zaloHref: 'https://zalo.me/0708570838',
+          whatsappHref: 'https://wa.me/84708570838',
+          branch: 'indochine' as const,
+        }
+      : activeFacility === 'chinchu-luxury'
+      ? {
+          name: 'CHINCHU LUXURY HOTEL',
+          address: '46 Nguyễn Cừ, Phường Thảo Điền, TP. Thủ Đức, TP. HCM',
+          phone: '+84 966 572 935',
+          phoneHref: 'tel:+84966572935',
+          zaloHref: 'https://zalo.me/0966572935',
+          whatsappHref: 'https://wa.me/84966572935',
+          branch: 'chinchu' as const,
+        }
+      : {
+          name: 'CHINCHU STAY',
+          address: '24 Xuân Thủy, Phường Thảo Điền, TP. Thủ Đức, TP. HCM',
+          phone: '+84 966 572 935',
+          phoneHref: 'tel:+84966572935',
+          zaloHref: 'https://zalo.me/0966572935',
+          whatsappHref: 'https://wa.me/84966572935',
+          branch: 'chinchu' as const,
+        };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -750,8 +779,9 @@ export const RoomCatalog: React.FC<RoomCatalogProps> = ({
           </p>
         </div>
 
-        {/* 1. Facility Switcher Tabs */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-8">
+        {/* 1. Facility Switcher Tabs - 3 separate branches */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-8">
+          {/* Tab 1: Indochine Casa */}
           <button
             type="button"
             onClick={() => {
@@ -759,29 +789,31 @@ export const RoomCatalog: React.FC<RoomCatalogProps> = ({
               onFilterChange('indochine-casa');
               setFilterCategory('all');
             }}
-            className={`w-full sm:w-auto px-6 py-3.5 rounded-2xl font-bold text-sm sm:text-base flex items-center justify-center gap-3 transition-all cursor-pointer shadow-sm ${
+            className={`w-full px-5 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-between gap-3 transition-all cursor-pointer shadow-sm ${
               activeFacility === 'indochine'
                 ? 'bg-gradient-to-r from-amber-800 to-amber-950 text-white shadow-lg ring-2 ring-amber-700 ring-offset-2 scale-102'
                 : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-200'
             }`}
           >
-            <div
-              className={`w-2.5 h-2.5 rounded-full ${
-                activeFacility === 'indochine' ? 'bg-amber-400 animate-pulse' : 'bg-stone-300'
-              }`}
-            />
-            <div className="text-left">
-              <div className="font-bold tracking-tight">{t.indochineName}</div>
+            <div className="flex items-center gap-2.5 text-left">
               <div
-                className={`text-xs font-normal ${
-                  activeFacility === 'indochine' ? 'text-amber-200' : 'text-stone-500'
+                className={`w-2.5 h-2.5 rounded-full shrink-0 ${
+                  activeFacility === 'indochine' ? 'bg-amber-400 animate-pulse' : 'bg-stone-300'
                 }`}
-              >
-                {t.indochineSub}
+              />
+              <div>
+                <div className="font-bold tracking-tight text-xs sm:text-sm">{t.indochineName}</div>
+                <div
+                  className={`text-xs font-normal ${
+                    activeFacility === 'indochine' ? 'text-amber-200' : 'text-stone-500'
+                  }`}
+                >
+                  {t.indochineSub}
+                </div>
               </div>
             </div>
             <span
-              className={`ml-2 text-xs px-2 py-0.5 rounded-full font-bold ${
+              className={`text-xs px-2 py-0.5 rounded-full font-bold shrink-0 ${
                 activeFacility === 'indochine'
                   ? 'bg-amber-700/60 text-amber-200'
                   : 'bg-stone-100 text-stone-600'
@@ -791,42 +823,87 @@ export const RoomCatalog: React.FC<RoomCatalogProps> = ({
             </span>
           </button>
 
+          {/* Tab 2: Chinchu Luxury Hotel */}
           <button
             type="button"
             onClick={() => {
-              setActiveFacility('chinchu');
+              setActiveFacility('chinchu-luxury');
               onFilterChange('chinchu-luxury');
               setFilterCategory('all');
             }}
-            className={`w-full sm:w-auto px-6 py-3.5 rounded-2xl font-bold text-sm sm:text-base flex items-center justify-center gap-3 transition-all cursor-pointer shadow-sm ${
-              activeFacility === 'chinchu'
+            className={`w-full px-5 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-between gap-3 transition-all cursor-pointer shadow-sm ${
+              activeFacility === 'chinchu-luxury'
+                ? 'bg-gradient-to-r from-emerald-900 to-teal-950 text-white shadow-lg ring-2 ring-emerald-700 ring-offset-2 scale-102'
+                : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-200'
+            }`}
+          >
+            <div className="flex items-center gap-2.5 text-left">
+              <div
+                className={`w-2.5 h-2.5 rounded-full shrink-0 ${
+                  activeFacility === 'chinchu-luxury' ? 'bg-emerald-400 animate-pulse' : 'bg-stone-300'
+                }`}
+              />
+              <div>
+                <div className="font-bold tracking-tight text-xs sm:text-sm">{t.chinchuLuxuryName}</div>
+                <div
+                  className={`text-xs font-normal ${
+                    activeFacility === 'chinchu-luxury' ? 'text-emerald-200' : 'text-stone-500'
+                  }`}
+                >
+                  {t.chinchuLuxurySub}
+                </div>
+              </div>
+            </div>
+            <span
+              className={`text-xs px-2 py-0.5 rounded-full font-bold shrink-0 ${
+                activeFacility === 'chinchu-luxury'
+                  ? 'bg-emerald-800/60 text-emerald-200'
+                  : 'bg-stone-100 text-stone-600'
+              }`}
+            >
+              {CHINCHU_LUXURY_PHOTOS.length} {t.photosCount}
+            </span>
+          </button>
+
+          {/* Tab 3: Chinchu Stay */}
+          <button
+            type="button"
+            onClick={() => {
+              setActiveFacility('chinchu-stay');
+              onFilterChange('chinchu-stay');
+              setFilterCategory('all');
+            }}
+            className={`w-full px-5 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-between gap-3 transition-all cursor-pointer shadow-sm ${
+              activeFacility === 'chinchu-stay'
                 ? 'bg-gradient-to-r from-stone-800 to-stone-950 text-white shadow-lg ring-2 ring-stone-700 ring-offset-2 scale-102'
                 : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-200'
             }`}
           >
-            <div
-              className={`w-2.5 h-2.5 rounded-full ${
-                activeFacility === 'chinchu' ? 'bg-emerald-400 animate-pulse' : 'bg-stone-300'
-              }`}
-            />
-            <div className="text-left">
-              <div className="font-bold tracking-tight">{t.chinchuName}</div>
+            <div className="flex items-center gap-2.5 text-left">
               <div
-                className={`text-xs font-normal ${
-                  activeFacility === 'chinchu' ? 'text-emerald-200' : 'text-stone-500'
+                className={`w-2.5 h-2.5 rounded-full shrink-0 ${
+                  activeFacility === 'chinchu-stay' ? 'bg-amber-400 animate-pulse' : 'bg-stone-300'
                 }`}
-              >
-                {t.chinchuSub}
+              />
+              <div>
+                <div className="font-bold tracking-tight text-xs sm:text-sm">{t.chinchuStayName}</div>
+                <div
+                  className={`text-xs font-normal ${
+                    activeFacility === 'chinchu-stay' ? 'text-stone-200' : 'text-stone-500'
+                  }`}
+                >
+                  {t.chinchuStaySub}
+                </div>
               </div>
             </div>
             <span
-              className={`ml-2 text-xs px-2 py-0.5 rounded-full font-bold ${
-                activeFacility === 'chinchu'
+              className={`text-xs px-2 py-0.5 rounded-full font-bold shrink-0 ${
+                activeFacility === 'chinchu-stay'
                   ? 'bg-stone-700 text-stone-200'
                   : 'bg-stone-100 text-stone-600'
               }`}
             >
-              {CHINCHU_PHOTOS.length} {t.photosCount}
+              {CHINCHU_STAY_PHOTOS.length} {t.photosCount}
             </span>
           </button>
         </div>
@@ -843,9 +920,9 @@ export const RoomCatalog: React.FC<RoomCatalogProps> = ({
                 {currentFacilityInfo.address}
               </span>
             </div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold">
-              <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-              <span>{t.priceHint}</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-bold">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
+              <span>{t.verifiedBadge}</span>
             </div>
           </div>
 

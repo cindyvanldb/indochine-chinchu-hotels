@@ -29,9 +29,15 @@ export const Hero: React.FC<HeroProps> = ({
       badge: 'Hệ thống cơ sở lưu trú tại An Khánh & Thảo Điền',
       mainTitle: 'Trải nghiệm lưu trú đầy tinh tế gần Thảo Điền, TP Hồ Chí Minh',
       subTitle: 'Hệ thống cơ sở lưu trú tại An Khánh & Thảo Điền. Indochine Casa cổ điển lãng mạn, Chinchu Luxury hiện đại tiện ích và Chinchu Stay năng động thân thiện giữa trung tâm Hồ Chí Minh.',
-      pricingHeadline: 'Indochine giá chỉ từ 600.000đ /đêm - Chinchu Stay chỉ 600.000đ /đêm - Chinchu Luxury Hotel chỉ từ 700.000đ /đêm',
+      pricingHeadline: 'Indochine giá chỉ từ 800.000đ /đêm - Chinchu Stay chỉ 600.000đ /đêm - Chinchu Luxury Hotel chỉ từ 700.000đ /đêm',
       pricingSub: 'Quý khách xem thông tin phòng trên website và gọi điện trực tiếp hotline để lễ tân hỗ trợ đặt phòng nhanh nhất.',
       googleRating: '4.9/5 trên Google Maps (850+ đánh giá xác thực)',
+      fromRate: 'Giá chỉ từ',
+      perNight: '/ đêm',
+      selectedBadge: 'Đang chọn',
+      branch1Badge: 'Cơ sở 1',
+      branch2Badge: 'Cơ sở 2',
+      branch3Badge: 'Cơ sở 3',
       ctaSearch: 'Gọi Đặt Phòng Trực Tiếp',
       ctaViewRooms: 'Xem Ảnh Tham Khảo & Tiện Ích',
       branch1Title: '📍 1. Indochine Casa Hotel (04 Thái Ly)',
@@ -49,9 +55,15 @@ export const Hero: React.FC<HeroProps> = ({
       badge: 'Hospitality System • An Khanh & Thao Dien',
       mainTitle: 'Refined Boutique Stays in the Heart of Thao Dien',
       subTitle: 'Boutique hospitality system in An Khanh & Thao Dien. Indochine Casa classic romance, Chinchu Luxury contemporary comfort, and Chinchu Stay vibrant and friendly in the heart of Ho Chi Minh City.',
-      pricingHeadline: 'Indochine from 600,000 VND / night - Chinchu Stay from 600,000 VND / night - Chinchu Luxury Hotel from 700,000 VND / night',
+      pricingHeadline: 'Indochine from 800,000 VND / night - Chinchu Stay from 600,000 VND / night - Chinchu Luxury Hotel from 700,000 VND / night',
       pricingSub: 'Browse room photos and call front desk directly for instant reservation & best rates',
       googleRating: '4.9/5 on Google Maps (850+ verified reviews)',
+      fromRate: 'Starting from',
+      perNight: '/ night',
+      selectedBadge: 'Selected',
+      branch1Badge: 'Branch 1',
+      branch2Badge: 'Branch 2',
+      branch3Badge: 'Branch 3',
       ctaSearch: 'Call Front Desk (24/7 Hotline)',
       ctaViewRooms: 'Browse Photos & Room Types',
       branch1Title: '📍 1. Indochine Casa Hotel (04 Thai Ly)',
@@ -69,9 +81,15 @@ export const Hero: React.FC<HeroProps> = ({
       badge: '호치민 안칸 & 타오디엔 부티크 숙소',
       mainTitle: '호치민시 타오디엔 중심의 품격 있는 부티크 스테이',
       subTitle: '안칸 & 타오디엔 호텔 시스템. 클래식 로맨스의 인도차이나 카사, 모던 럭셔리의 친추 럭셔리, 활기찬 도심의 친추 스테이.',
-      pricingHeadline: '인도차이나 1박 600,000동부터 - 친추 스테이 600,000동부터 - 친추 럭셔리 700,000동부터',
+      pricingHeadline: '인도차이나 1박 800,000동부터 - 친추 스테이 600,000동부터 - 친추 럭셔리 700,000동부터',
       pricingSub: '웹사이트에서 객실 정보를 둘러보시고 전화로 간편하게 예약하세요',
       googleRating: 'Google 지도 4.9/5 (850개 이상의 실제 후기)',
+      fromRate: '1박 최저',
+      perNight: '/ 박',
+      selectedBadge: '선택됨',
+      branch1Badge: '1호점',
+      branch2Badge: '2호점',
+      branch3Badge: '3호점',
       ctaSearch: '전화로 바로 예약하기 (24/7)',
       ctaViewRooms: '객실 사진 & 타입 보기',
       branch1Title: '📍 1. 인도차이나 카사 (04 Thai Ly)',
@@ -89,9 +107,15 @@ export const Hero: React.FC<HeroProps> = ({
       badge: '胡志明市安庆与草田精品旅宿',
       mainTitle: '胡志明市第二郡草田 雅致典雅居停体验',
       subTitle: '安庆与草田精品酒店体系：经典法式印支风情 Indochine Casa、现代轻奢商务 Chinchu Luxury，以及位于核心商业街的 Chinchu Stay。',
-      pricingHeadline: 'Indochine 每晚 600,000 越南盾起 - Chinchu Stay 600,000 越南盾起 - Chinchu Luxury 700,000 越南盾起',
+      pricingHeadline: 'Indochine 每晚 800,000 越南盾起 - Chinchu Stay 600,000 越南盾起 - Chinchu Luxury 700,000 越南盾起',
       pricingSub: '在网站查看房型详情后，直接致电前台热线办理预订',
       googleRating: '谷歌地图 4.9/5（850+ 条真实住客好评）',
+      fromRate: '每晚起价',
+      perNight: '/ 晚',
+      selectedBadge: '已选',
+      branch1Badge: '1号店',
+      branch2Badge: '2号店',
+      branch3Badge: '3号店',
       ctaSearch: '致电前台直订房间 (24/7)',
       ctaViewRooms: '查看客房实景与房型',
       branch1Title: '📍 1. Indochine Casa (蔡莉街04号)',
@@ -108,6 +132,12 @@ export const Hero: React.FC<HeroProps> = ({
   };
 
   const t = translations[language] || translations.vi;
+
+  const getBranchBadge = (hotelId: string) => {
+    if (hotelId === 'indochine-casa') return t.branch1Badge;
+    if (hotelId === 'chinchu-luxury') return t.branch2Badge;
+    return t.branch3Badge;
+  };
 
   return (
     <section className="relative overflow-hidden bg-stone-950 text-white pt-8 pb-16 lg:pt-14 lg:pb-24">
@@ -148,34 +178,63 @@ export const Hero: React.FC<HeroProps> = ({
             {t.subTitle}
           </p>
 
-          {/* Quick hotel pill selector */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
+          {/* Hotel Selector Cards - Larger, balanced 3-column framed design */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 w-full max-w-3xl mb-8">
             {hotels.map((h) => {
               const isSelected = selectedHotelId === h.id;
+
               return (
                 <button
+                  type="button"
                   key={h.id}
                   onClick={() => onSelectHotel(h.id)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                  className={`group relative p-4 sm:p-4.5 rounded-2xl text-left transition-all duration-200 cursor-pointer flex flex-col justify-center backdrop-blur-md ${
                     isSelected
-                      ? 'bg-amber-600 text-white shadow-md ring-2 ring-amber-400/50'
-                      : 'bg-stone-900/70 text-stone-300 hover:bg-stone-800 hover:text-white border border-stone-700'
+                      ? 'bg-gradient-to-b from-stone-900/95 via-amber-950/80 to-stone-900/95 border-2 border-amber-400 text-white shadow-xl shadow-amber-950/60 ring-2 ring-amber-400/30 scale-[1.02]'
+                      : 'bg-stone-900/80 hover:bg-stone-800/90 border border-stone-700/80 text-stone-300 hover:text-white hover:border-amber-600/50 shadow-md'
                   }`}
                 >
-                  {h.name}
+                  <div className="w-full">
+                    {/* Branch Badge & Selection Status */}
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <div className="flex items-center gap-1.5">
+                        <span
+                          className={`w-2 h-2 rounded-full shrink-0 transition-colors ${
+                            isSelected
+                              ? 'bg-amber-400 ring-2 ring-amber-300 animate-pulse'
+                              : 'bg-stone-600 group-hover:bg-amber-400'
+                          }`}
+                        />
+                        <span
+                          className={`text-[11px] font-semibold tracking-wider uppercase ${
+                            isSelected ? 'text-amber-300' : 'text-stone-400'
+                          }`}
+                        >
+                          {getBranchBadge(h.id)}
+                        </span>
+                      </div>
+
+                      {isSelected && (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/40">
+                          {t.selectedBadge}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Hotel Name */}
+                    <div className="font-bold text-sm sm:text-base text-white tracking-tight leading-snug mb-1.5">
+                      {h.name}
+                    </div>
+
+                    {/* Address */}
+                    <div className="text-xs text-stone-300/85 flex items-center gap-1.5 font-light">
+                      <span className="text-amber-400/90">📍</span>
+                      <span>{h.address} • Thảo Điền</span>
+                    </div>
+                  </div>
                 </button>
               );
             })}
-          </div>
-
-          {/* Direct Booking Headline Banner */}
-          <div className="bg-amber-950/80 border border-amber-600/60 rounded-2xl p-4 mb-6 backdrop-blur-md w-full max-w-2xl">
-            <div className="text-amber-300 font-bold text-sm sm:text-base leading-snug mb-1">
-              ✨ {t.pricingHeadline}
-            </div>
-            <p className="text-stone-300 text-xs sm:text-sm">
-              {t.pricingSub}
-            </p>
           </div>
 
           {/* CTAs */}

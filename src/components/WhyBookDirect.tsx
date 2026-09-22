@@ -15,7 +15,7 @@ export const WhyBookDirect: React.FC<WhyBookDirectProps> = ({
     vi: {
       badge: 'Đặc Quyền Khách Hàng Đặt Trực Tiếp',
       title: 'Vì Sao Quý Khách Nên Liên Hệ Đặt Phòng Trực Tiếp Tại Hotline / Zalo?',
-      subtitle: 'Tận hưởng mức giá ưu đãi tốt nhất (chỉ từ 600.000đ - 700.000đ/đêm) cùng dịch vụ chăm sóc khách hàng cá nhân hóa 24/7 từ đội ngũ lễ tân chuyên nghiệp.',
+      subtitle: 'Tận hưởng mức giá ưu đãi tốt nhất (chỉ từ 600.000đ - 800.000đ/đêm) cùng dịch vụ chăm sóc khách hàng cá nhân hóa 24/7 từ đội ngũ lễ tân chuyên nghiệp.',
       cta: 'Gọi Hotline Đặt Phòng Trực Tiếp 24/7',
       perks: [
         {

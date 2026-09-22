@@ -87,7 +87,7 @@ const RAW_HOTELS_DATA: HotelProperty[] = [
     },
     priceRange: {
       hourlyFrom: 350000,
-      dailyFrom: 600000,
+      dailyFrom: 800000,
       monthlyFrom: 16000000,
     },
     distanceMetrics: {
@@ -352,8 +352,8 @@ const RAW_ROOMS_DATA: RoomType[] = [
     hasWindow: true,
     hourlyPrice: 420000,
     hourlyAdditional: 110000,
-    dailyPrice: 950000,
-    originalDailyPrice: 1150000,
+    dailyPrice: 1050000,
+    originalDailyPrice: 1250000,
     monthlyPrice: 20000000,
     featuredImage: '/assets/indochine/apartment-room.png',
     gallery: [
@@ -444,8 +444,8 @@ const RAW_ROOMS_DATA: RoomType[] = [
     hasWindow: true,
     hourlyPrice: 380000,
     hourlyAdditional: 100000,
-    dailyPrice: 850000,
-    originalDailyPrice: 990000,
+    dailyPrice: 900000,
+    originalDailyPrice: 1050000,
     monthlyPrice: 18000000,
     featuredImage: '/assets/indochine/deluxe-room.png',
     gallery: [
@@ -536,8 +536,8 @@ const RAW_ROOMS_DATA: RoomType[] = [
     hasWindow: true,
     hourlyPrice: 380000,
     hourlyAdditional: 100000,
-    dailyPrice: 750000,
-    originalDailyPrice: 900000,
+    dailyPrice: 850000,
+    originalDailyPrice: 1000000,
     monthlyPrice: 17500000,
     featuredImage: '/assets/indochine/premier-room.png',
     gallery: [
@@ -628,8 +628,8 @@ const RAW_ROOMS_DATA: RoomType[] = [
     hasWindow: true,
     hourlyPrice: 320000,
     hourlyAdditional: 90000,
-    dailyPrice: 600000,
-    originalDailyPrice: 750000,
+    dailyPrice: 800000,
+    originalDailyPrice: 950000,
     monthlyPrice: 15500000,
     featuredImage: '/assets/indochine/studio-room.png',
     gallery: [
@@ -1362,10 +1362,10 @@ export const FAQS_DATA: FAQItem[] = [
       zh: '各分店每晚住宿价格如何计算？包含哪些配套设施与服务？',
     },
     answer: {
-      vi: 'Hệ thống áp dụng giá lưu trú theo đêm trực tiếp vô cùng ưu đãi: Indochine Casa chỉ từ 600.000đ/đêm, Chinchu Stay từ 600.000đ/đêm và Chinchu Luxury từ 700.000đ/đêm. Mức giá đã bao gồm đầy đủ tiện nghi tiêu chuẩn cao cấp, Wi-Fi tốc độ cao, nước uống miễn phí và dọn phòng chu đáo. Quý khách vui lòng gọi Hotline hoặc chat Zalo trực tiếp để được xác nhận phòng trống nhanh nhất.',
-      en: 'Direct nightly rates start from only 600,000 VND / night at Indochine Casa and Chinchu Stay, and 700,000 VND / night at Chinchu Luxury. Rates include all standard amenities, high-speed Wi-Fi, bottled water, toiletries, and housekeeping. Contact our front desk via Hotline or Zalo for immediate booking.',
-      ko: '공식 직영 예약 시 특별 우대 요금이 적용됩니다: 인도차이나 카사 1박 600,000동부터, 친추 스테이 600,000동부터, 친추 럭셔리 700,000동부터. 모든 객실 요금에는 프리미엄 어메니티, 초고속 Wi-Fi, 무료 생수, 티/커피 및 정기 룸클리닝이 포함되어 있습니다. 핫라인 전화 또는 Zalo로 문의하시면 실시간 잔여 객실을 즉시 확인해 드립니다.',
-      zh: '官方直接预订专享特惠底价：Indochine Casa 每晚仅 600,000 越南盾起，Chinchu Stay 600,000 越南盾起，Chinchu Luxury 700,000 越南盾起。房价已包含高端客房设施、高速无限 Wi-Fi、免费矿泉水茶饮及客房保洁服务。欢迎致电热线或通过 Zalo 在线咨询办理即时留房。',
+      vi: 'Hệ thống áp dụng giá lưu trú theo đêm trực tiếp vô cùng ưu đãi: Indochine Casa chỉ từ 800.000đ/đêm, Chinchu Stay từ 600.000đ/đêm và Chinchu Luxury từ 700.000đ/đêm. Mức giá đã bao gồm đầy đủ tiện nghi tiêu chuẩn cao cấp, Wi-Fi tốc độ cao, nước uống miễn phí và dọn phòng chu đáo. Quý khách vui lòng gọi Hotline hoặc chat Zalo trực tiếp để được xác nhận phòng trống nhanh nhất.',
+      en: 'Direct nightly rates start from only 800,000 VND / night at Indochine Casa, 600,000 VND / night at Chinchu Stay, and 700,000 VND / night at Chinchu Luxury. Rates include all standard amenities, high-speed Wi-Fi, bottled water, toiletries, and housekeeping. Contact our front desk via Hotline or Zalo for immediate booking.',
+      ko: '공식 직영 예약 시 특별 우대 요금이 적용됩니다: 인도차이나 카사 1박 800,000동부터, 친추 스테이 600,000동부터, 친추 럭셔리 700,000동부터. 모든 객실 요금에는 프리미엄 어메니티, 초고속 Wi-Fi, 무료 생수, 티/커피 및 정기 룸클리닝이 포함되어 있습니다. 핫라인 전화 또는 Zalo로 문의하시면 실시간 잔여 객실을 즉시 확인해 드립니다.',
+      zh: '官方直接预订专享特惠底价：Indochine Casa 每晚仅 800,000 越南盾起，Chinchu Stay 600,000 越南盾起，Chinchu Luxury 700,000 越南盾起。房价已包含高端客房设施、高速无限 Wi-Fi、免费矿泉水茶饮及客房保洁服务。欢迎致电热线或通过 Zalo 在线咨询办理即时留房。',
     },
   },
   {
