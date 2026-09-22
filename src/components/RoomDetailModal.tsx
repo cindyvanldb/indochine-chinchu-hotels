@@ -3,6 +3,7 @@ import { X, Bed, Users, Bath, Sun, Wifi, Tv, ShieldCheck, Check, Calendar, Arrow
 import { Language, RoomType, HotelProperty } from '../types';
 import { getLocalizedText, getLocalizedList } from '../utils/i18n';
 import { WhatsAppIcon, WeChatIcon, ZaloIcon } from './ContactIcons';
+import { getAssetUrl } from '../utils/assets';
 
 interface RoomDetailModalProps {
   room: RoomType | null;
@@ -168,7 +169,7 @@ export const RoomDetailModal: React.FC<RoomDetailModalProps> = ({
           <div className="space-y-3">
             <div className="relative h-64 sm:h-96 rounded-2xl overflow-hidden bg-stone-900 shadow-inner">
               <img
-                src={room.gallery[activeImageIndex] || room.featuredImage}
+                src={getAssetUrl(room.gallery[activeImageIndex] || room.featuredImage)}
                 alt={getLocalizedText(room.name, language)}
                 className="w-full h-full object-cover"
               />
@@ -188,7 +189,7 @@ export const RoomDetailModal: React.FC<RoomDetailModalProps> = ({
                       activeImageIndex === idx ? 'border-amber-600 scale-95 shadow-sm' : 'border-transparent opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <img src={getAssetUrl(img)} alt="" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>

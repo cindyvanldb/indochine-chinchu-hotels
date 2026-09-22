@@ -3,6 +3,7 @@ import { X, Phone, MessageCircle, MapPin, Sparkles, ShieldCheck, Clock, CheckCir
 import { Language, HotelProperty, RoomType } from '../types';
 import { getLocalizedText } from '../utils/i18n';
 import { WhatsAppIcon, WeChatIcon, ZaloIcon } from './ContactIcons';
+import { getAssetUrl } from '../utils/assets';
 
 interface DirectBookingModalProps {
   isOpen: boolean;
@@ -188,7 +189,7 @@ export const DirectBookingModal: React.FC<DirectBookingModalProps> = ({
               </div>
               <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 border border-stone-700">
                 <img
-                  src={preselectedRoom.featuredImage}
+                  src={getAssetUrl(preselectedRoom.featuredImage)}
                   alt=""
                   className="w-full h-full object-cover"
                 />
@@ -223,7 +224,7 @@ export const DirectBookingModal: React.FC<DirectBookingModalProps> = ({
                 </p>
               </div>
               <img
-                src="/logo-indochine.png"
+                src={getAssetUrl('/logo-indochine.png')}
                 alt="Indochine Casa Logo"
                 className="h-8 w-auto max-w-[70px] object-contain shrink-0 hidden sm:block"
               />
@@ -301,7 +302,7 @@ export const DirectBookingModal: React.FC<DirectBookingModalProps> = ({
                 </p>
               </div>
               <img
-                src="/logo-chinchu.png"
+                src={getAssetUrl('/logo-chinchu.png')}
                 alt="Chinchu Logo"
                 className="h-8 w-auto max-w-[50px] object-contain shrink-0 hidden sm:block"
               />

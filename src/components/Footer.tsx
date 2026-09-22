@@ -2,6 +2,7 @@ import React from 'react';
 import { MapPin, Phone, Mail, MessageCircle, Clock, ShieldCheck, CreditCard, Navigation, Heart } from 'lucide-react';
 import { Language, HotelProperty } from '../types';
 import { WhatsAppIcon, WeChatIcon, ZaloIcon } from './ContactIcons';
+import { getAssetUrl } from '../utils/assets';
 
 interface FooterProps {
   language: Language;
@@ -107,14 +108,14 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 bg-white rounded-2xl p-2 border border-stone-700 shadow-md shrink-0">
                 <img
-                  src="/logo-indochine.png"
+                  src={getAssetUrl('/logo-indochine.png')}
                   alt="Logo Indochine Casa Hotel"
                   className="h-8 sm:h-9 w-auto max-w-[85px] object-contain"
                   title="Indochine Casa Hotel"
                 />
                 <div className="w-px h-6 bg-stone-300" />
                 <img
-                  src="/logo-chinchu.png"
+                  src={getAssetUrl('/logo-chinchu.png')}
                   alt="Logo Chinchu"
                   className="h-8 sm:h-9 w-auto max-w-[55px] object-contain"
                   title="Chinchu Luxury & Stay"

@@ -3,6 +3,7 @@ import { MapPin, Star, ExternalLink, Calendar, Check, Clock, Sparkles, Navigatio
 import { Language, HotelProperty } from '../types';
 import { getLocalizedText, getLocalizedList } from '../utils/i18n';
 import { WhatsAppIcon, WeChatIcon, ZaloIcon } from './ContactIcons';
+import { getAssetUrl } from '../utils/assets';
 
 interface PropertyShowcaseProps {
   language: Language;
@@ -146,7 +147,7 @@ export const PropertyShowcase: React.FC<PropertyShowcaseProps> = ({
                 {/* Image Container with Badges */}
                 <div className="relative h-64 overflow-hidden group">
                   <img
-                    src={hotel.heroImage}
+                    src={getAssetUrl(hotel.heroImage)}
                     alt={hotel.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
@@ -156,7 +157,7 @@ export const PropertyShowcase: React.FC<PropertyShowcaseProps> = ({
                   <div className="absolute top-4 left-4 flex flex-wrap items-center gap-2">
                     <div className="px-2.5 py-1 rounded-xl bg-white/95 backdrop-blur-md shadow-sm border border-stone-200 flex items-center gap-2">
                       <img
-                        src={hotel.logoUrl}
+                        src={getAssetUrl(hotel.logoUrl)}
                         alt={`Logo ${hotel.name}`}
                         className="h-5 w-auto object-contain"
                       />

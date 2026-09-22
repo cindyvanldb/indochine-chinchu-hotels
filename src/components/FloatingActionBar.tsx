@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Phone, MessageCircle, MapPin, Calendar, ArrowUp, X, Check, Copy } from 'lucide-react';
 import { Language, HotelProperty } from '../types';
 import { WhatsAppIcon, WeChatIcon, ZaloIcon } from './ContactIcons';
+import { getAssetUrl } from '../utils/assets';
 
 interface FloatingActionBarProps {
   language: Language;
@@ -45,7 +46,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({
     whatsappDisplay: '+84 708 570 838',
     whatsappUrl: 'https://wa.me/84708570838',
     wechatId: '0708570838',
-    logo: '/logo-indochine.png',
+    logo: getAssetUrl('/logo-indochine.png'),
   };
 
   const chinchuContact = {
@@ -58,7 +59,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({
     whatsappDisplay: '+84 966 572 935',
     whatsappUrl: 'https://wa.me/84966572935',
     wechatId: '0966572935',
-    logo: '/logo-chinchu.png',
+    logo: getAssetUrl('/logo-chinchu.png'),
   };
 
   const handleCopy = (id: string, text: string) => {

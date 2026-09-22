@@ -19,6 +19,7 @@ import {
 import { Language, RoomType, LocalizedString } from '../types';
 import { getLocalizedText } from '../utils/i18n';
 import { WhatsAppIcon, WeChatIcon, ZaloIcon } from './ContactIcons';
+import { getAssetUrl } from '../utils/assets';
 
 export interface GalleryPhoto {
   url: string;
@@ -972,7 +973,7 @@ export const RoomCatalog: React.FC<RoomCatalogProps> = ({
                 {/* Photo Frame */}
                 <div className="relative aspect-[4/3] bg-stone-100 overflow-hidden">
                   <img
-                    src={photo.url}
+                    src={getAssetUrl(photo.url)}
                     alt={photoTitle}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     loading="lazy"
@@ -1118,7 +1119,7 @@ export const RoomCatalog: React.FC<RoomCatalogProps> = ({
             {/* Main Image */}
             <div className="max-h-[82vh] max-w-6xl w-full flex items-center justify-center p-1">
               <img
-                src={filteredPhotos[lightboxIndex].url}
+                src={getAssetUrl(filteredPhotos[lightboxIndex].url)}
                 alt={getLocalizedText(filteredPhotos[lightboxIndex].title, language)}
                 className="max-h-[82vh] max-w-full object-contain rounded-xl shadow-2xl transition-all"
               />

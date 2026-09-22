@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Phone, MessageCircle, Globe, Menu, X, Calendar, MapPin, CheckCircle2 } from 'lucide-react';
 import { Language, HotelProperty } from '../types';
 import { WhatsAppIcon, WeChatIcon, ZaloIcon } from './ContactIcons';
+import { getAssetUrl } from '../utils/assets';
 
 interface HeaderProps {
   language: Language;
@@ -240,14 +241,14 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Dual Brand Logos: Exact designs uploaded for Indochine Casa and Chinchu */}
             <div className="flex items-center gap-1.5 sm:gap-2 bg-white rounded-2xl p-1.5 sm:p-2 border border-stone-200/90 shadow-xs group-hover:border-amber-600/60 group-hover:shadow-md transition-all shrink-0">
               <img
-                src={`${import.meta.env.BASE_URL}logo-indochine.png`}
+                src={getAssetUrl('/logo-indochine.png')}
                 alt="Logo Indochine Casa Hotel"
                 className="h-8 sm:h-10 w-auto max-w-[70px] sm:max-w-[95px] object-contain"
                 title="Indochine Casa Hotel"
               />
               <div className="w-px h-6 sm:h-7 bg-stone-200" />
               <img
-                src={`${import.meta.env.BASE_URL}logo-chinchu.png`}
+                src={getAssetUrl('/logo-chinchu.png')}
                 alt="Logo Chinchu"
                 className="h-8 sm:h-10 w-auto max-w-[50px] sm:max-w-[65px] object-contain"
                 title="Chinchu Luxury & Stay"

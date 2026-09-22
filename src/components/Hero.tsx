@@ -2,6 +2,7 @@ import React from 'react';
 import { Star, ArrowRight, Phone, Sparkles, Check, MessageCircle } from 'lucide-react';
 import { Language, HotelProperty, BookingType } from '../types';
 import { WhatsAppIcon, WeChatIcon, ZaloIcon } from './ContactIcons';
+import { getAssetUrl } from '../utils/assets';
 
 interface HeroProps {
   language: Language;
@@ -113,7 +114,7 @@ export const Hero: React.FC<HeroProps> = ({
       {/* Background Hero Image with Dark Gradient Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src={activeHotel.heroImage}
+          src={getAssetUrl(activeHotel.heroImage)}
           alt={activeHotel.name}
           className="w-full h-full object-cover object-center scale-105 transition-all duration-1000 ease-out filter brightness-45"
         />

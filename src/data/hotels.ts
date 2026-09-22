@@ -1,6 +1,7 @@
 import { HotelProperty, RoomType, Review, FAQItem } from '../types';
+import { getAssetUrl } from '../utils/assets';
 
-export const HOTELS_DATA: HotelProperty[] = [
+const RAW_HOTELS_DATA: HotelProperty[] = [
   {
     id: 'indochine-casa',
     name: 'INDOCHINE CASA HOTEL',
@@ -307,7 +308,14 @@ export const HOTELS_DATA: HotelProperty[] = [
   },
 ];
 
-export const ROOMS_DATA: RoomType[] = [
+export const HOTELS_DATA: HotelProperty[] = RAW_HOTELS_DATA.map((h) => ({
+  ...h,
+  logoUrl: getAssetUrl(h.logoUrl),
+  heroImage: getAssetUrl(h.heroImage),
+  gallery: h.gallery.map(getAssetUrl),
+}));
+
+const RAW_ROOMS_DATA: RoomType[] = [
   // INDOCHINE CASA HOTEL ROOMS
   {
     id: 'indochine-apartment',
@@ -1197,6 +1205,12 @@ export const ROOMS_DATA: RoomType[] = [
     isPopular: false,
   },
 ];
+
+export const ROOMS_DATA: RoomType[] = RAW_ROOMS_DATA.map((r) => ({
+  ...r,
+  featuredImage: getAssetUrl(r.featuredImage),
+  gallery: r.gallery.map(getAssetUrl),
+}));
 
 export const REVIEWS_DATA: Review[] = [
   {
