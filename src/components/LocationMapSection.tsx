@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
-import { MapPin, Navigation, Copy, Check, Phone, ExternalLink, Compass, Train, Car, Plane, ShoppingBag, Sparkles } from 'lucide-react';
+import { MapPin, Navigation, Copy, Check, Phone, ExternalLink, Compass, Train, Car, Plane, ShoppingBag, Sparkles, MessageCircle } from 'lucide-react';
 import { Language, HotelProperty } from '../types';
+import { WhatsAppIcon, WeChatIcon, ZaloIcon } from './ContactIcons';
 
 interface LocationMapSectionProps {
   language: Language;
   hotels: HotelProperty[];
+  onOpenWeChat?: (branch?: 'indochine' | 'chinchu') => void;
 }
 
 export const LocationMapSection: React.FC<LocationMapSectionProps> = ({
   language,
   hotels,
+  onOpenWeChat,
 }) => {
   const [activeHotelId, setActiveHotelId] = useState<string>(hotels[0]?.id || 'indochine-casa');
   const [copiedAddress, setCopiedAddress] = useState<boolean>(false);
 
   const activeHotel = hotels.find((h) => h.id === activeHotelId) || hotels[0];
 
-  const t = {
+  const translations = {
     vi: {
       badge: 'Vị Trí Đắc Địa Tại Trung Tâm Thảo Điền & An Khánh',
       title: 'Bản Đồ Vị Trí & Hướng Dẫn Di Chuyển',
@@ -35,6 +38,10 @@ export const LocationMapSection: React.FC<LocationMapSectionProps> = ({
       xuanthuy: 'Phố ẩm thực & cafe Xuân Thủy:',
       grabTipTitle: 'Lưu ý khi đi Grab / Taxi:',
       grabTipText: 'Quý khách chỉ cần tìm đúng tên khách sạn trên ứng dụng Grab/XanhSM ("Indochine Casa Hotel 4 Thái Ly" hoặc "Chinchu Luxury 46 Nguyễn Cừ" hoặc "Chinchu Stay 24 Xuân Thủy") xe sẽ đưa tới tận sảnh.',
+      walkMetric: 'phút đi bộ (350m)',
+      driveMetric: 'phút lái xe',
+      mallMetric: 'phút (600m)',
+      airportMetric: 'phút',
     },
     en: {
       badge: 'Prime Location in Central Thao Dien & An Khanh',
@@ -54,8 +61,60 @@ export const LocationMapSection: React.FC<LocationMapSectionProps> = ({
       xuanthuy: 'Xuan Thuy Dining & Cafe Boulevard:',
       grabTipTitle: 'Taxi / Ride-hailing Tip:',
       grabTipText: 'Search directly by property name in Grab or XanhSM apps for seamless door-to-door arrival.',
+      walkMetric: 'mins walk (350m)',
+      driveMetric: 'mins drive',
+      mallMetric: 'mins (600m)',
+      airportMetric: 'mins',
     },
-  }[language];
+    ko: {
+      badge: '타오디엔 & 안칸 중심의 최적의 위치',
+      title: '호텔 위치 안내 및 오시는 길',
+      subtitle: '안전하고 세련된 타오디엔 외국인 밀집 지역에 위치하여 다양한 글로벌 레스토랑, 스페셜티 카페, 1군 시내 및 메트로역과 직결되는 편리한 교통을 자랑합니다.',
+      selectLocation: '지점별 지도 보기:',
+      openInGoogleMaps: 'Google 지도 길찾기 열기',
+      copyAddress: '주소 복사',
+      copiedText: '주소가 클립보드에 복사되었습니다!',
+      callReceptionForDirections: '프런트 데스크 길 안내 문의',
+      landmarksTitle: '주요 랜드마크 소요 시간',
+      metro: '타오디엔 메트로 1호선 역:',
+      district1: '호치민 1군 시내 (응우옌후에 보행자 거리):',
+      landmark81: '랜드마크 81 & 빈탄군:',
+      vincom: '빈컴 메가몰 타오디엔:',
+      airport: '탄손누트 국제공항:',
+      xuanthuy: '쑤언투이 거리 카페 & 맛집:',
+      grabTipTitle: 'Grab / 택시 이용 팁:',
+      grabTipText: 'Grab 또는 XanhSM 앱에서 호텔 영문명("Indochine Casa Hotel", "Chinchu Luxury", "Chinchu Stay")을 검색하시면 로비 바로 앞까지 편안하게 이동하실 수 있습니다.',
+      walkMetric: '분 도보 (350m)',
+      driveMetric: '분 차량 이동',
+      mallMetric: '분 (600m)',
+      airportMetric: '분',
+    },
+    zh: {
+      badge: '坐落胡志明市第二郡草田与安庆核心地段',
+      title: '地理位置地图与交通指引',
+      subtitle: '位于治安优良、格调高雅的草田国际使馆与外籍商圈，汇聚众多全球特色餐厅与网红咖啡馆，便捷直达第一郡市中心及地铁站。',
+      selectLocation: '选择分店查看地图：',
+      openInGoogleMaps: '在谷歌地图中打开导航',
+      copyAddress: '复制详细地址',
+      copiedText: '地址已复制到剪贴板！',
+      callReceptionForDirections: '致电前台咨询到店指引',
+      landmarksTitle: '前往城市主要地标时间',
+      metro: '草田地铁1号线站：',
+      district1: '第一郡市中心（阮惠街步行街）：',
+      landmark81: 'Landmark 81 大厦与平盛区：',
+      vincom: 'Vincom Mega Mall 草田购物中心：',
+      airport: '新山一国际机场：',
+      xuanthuy: '春水街特色美食咖啡街：',
+      grabTipTitle: '打车与 Grab 出行提示：',
+      grabTipText: '在 Grab 或 XanhSM 打车软件中直接输入酒店名称（"Indochine Casa Hotel" 或 "Chinchu Luxury" 或 "Chinchu Stay"），司机可直接接送至酒店大门。',
+      walkMetric: '分钟步行 (350米)',
+      driveMetric: '分钟车程',
+      mallMetric: '分钟 (600米)',
+      airportMetric: '分钟',
+    },
+  };
+
+  const t = translations[language] || translations.vi;
 
   const handleCopyAddress = () => {
     navigator.clipboard.writeText(activeHotel.fullAddress);
@@ -169,7 +228,7 @@ export const LocationMapSection: React.FC<LocationMapSectionProps> = ({
                     <Train className="w-4 h-4 text-amber-700 shrink-0" />
                     <span>{t.metro}</span>
                   </div>
-                  <span className="font-bold text-stone-900">{activeHotel.distanceMetrics.metroMinutes} phút đi bộ (350m)</span>
+                  <span className="font-bold text-stone-900">{activeHotel.distanceMetrics.metroMinutes} {t.walkMetric}</span>
                 </div>
 
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-white border border-stone-200">
@@ -177,7 +236,7 @@ export const LocationMapSection: React.FC<LocationMapSectionProps> = ({
                     <Car className="w-4 h-4 text-amber-700 shrink-0" />
                     <span>{t.district1}</span>
                   </div>
-                  <span className="font-bold text-stone-900">{activeHotel.distanceMetrics.district1Minutes} phút lái xe</span>
+                  <span className="font-bold text-stone-900">{activeHotel.distanceMetrics.district1Minutes} {t.driveMetric}</span>
                 </div>
 
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-white border border-stone-200">
@@ -185,7 +244,7 @@ export const LocationMapSection: React.FC<LocationMapSectionProps> = ({
                     <ShoppingBag className="w-4 h-4 text-amber-700 shrink-0" />
                     <span>{t.vincom}</span>
                   </div>
-                  <span className="font-bold text-stone-900">{activeHotel.distanceMetrics.vincomMegaMallMinutes} phút (600m)</span>
+                  <span className="font-bold text-stone-900">{activeHotel.distanceMetrics.vincomMegaMallMinutes} {t.mallMetric}</span>
                 </div>
 
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-white border border-stone-200">
@@ -193,7 +252,7 @@ export const LocationMapSection: React.FC<LocationMapSectionProps> = ({
                     <Plane className="w-4 h-4 text-amber-700 shrink-0" />
                     <span>{t.airport}</span>
                   </div>
-                  <span className="font-bold text-stone-900">{activeHotel.distanceMetrics.airportMinutes} phút</span>
+                  <span className="font-bold text-stone-900">{activeHotel.distanceMetrics.airportMinutes} {t.airportMetric}</span>
                 </div>
               </div>
 
@@ -205,15 +264,57 @@ export const LocationMapSection: React.FC<LocationMapSectionProps> = ({
                 </p>
               </div>
 
-              {/* Direct call button */}
-              <div className="mt-5">
-                <a
-                  href={`tel:${activeHotel.phone.replace(/\s/g, '')}`}
-                  className="w-full py-3 px-4 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-semibold text-xs flex items-center justify-center gap-2 transition-colors shadow-sm"
-                >
-                  <Phone className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{t.callReceptionForDirections}: {activeHotel.phone}</span>
-                </a>
+              {/* Direct Multi-channel Contact */}
+              <div className="mt-5 space-y-2">
+                <span className="text-[11px] font-bold text-stone-700 block">
+                  {t.callReceptionForDirections}:
+                </span>
+                <div className="grid grid-cols-2 gap-2">
+                  <a
+                    href={`tel:${activeHotel.phone.replace(/\s/g, '')}`}
+                    className="py-2.5 px-3 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-xs"
+                    title={`Gọi ${activeHotel.phone}`}
+                  >
+                    <Phone className="w-3.5 h-3.5 text-amber-400" />
+                    <span>{activeHotel.phone}</span>
+                  </a>
+
+                  <a
+                    href={activeHotel.zaloUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-xs"
+                    title="Zalo"
+                  >
+                    <ZaloIcon className="w-3.5 h-3.5" />
+                    <span>Zalo</span>
+                  </a>
+
+                  <a
+                    href={activeHotel.id === 'indochine-casa' ? 'https://wa.me/84708570838' : 'https://wa.me/84966572935'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="py-2.5 px-3 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-xs"
+                    title="WhatsApp"
+                  >
+                    <WhatsAppIcon className="w-3.5 h-3.5" />
+                    <span>WhatsApp</span>
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onOpenWeChat) {
+                        onOpenWeChat(activeHotel.id === 'indochine-casa' ? 'indochine' : 'chinchu');
+                      }
+                    }}
+                    className="py-2.5 px-3 rounded-xl bg-[#07C160] hover:bg-[#059648] text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-xs cursor-pointer"
+                    title="WeChat"
+                  >
+                    <WeChatIcon className="w-3.5 h-3.5" />
+                    <span>WeChat</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>

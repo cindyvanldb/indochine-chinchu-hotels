@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
-import { Star, MapPin, Calendar, Clock, Users, ArrowRight, ShieldCheck, Zap, Phone, Sparkles, Check, MessageCircle } from 'lucide-react';
+import React from 'react';
+import { Star, ArrowRight, Phone, Sparkles, Check, MessageCircle } from 'lucide-react';
 import { Language, HotelProperty, BookingType } from '../types';
+import { WhatsAppIcon, WeChatIcon, ZaloIcon } from './ContactIcons';
 
 interface HeroProps {
   language: Language;
   hotels: HotelProperty[];
   selectedHotelId: string;
   onSelectHotel: (id: string) => void;
-  onSearchRooms: (params: { hotelId: string; bookingType: BookingType; checkInDate: string; checkOutDate: string }) => void;
+  onSearchRooms?: (params: { hotelId: string; bookingType: BookingType; checkInDate: string; checkOutDate: string }) => void;
   onOpenBooking: (hotelId?: string) => void;
+  onOpenWeChat?: (branch?: 'indochine' | 'chinchu') => void;
 }
 
 export const Hero: React.FC<HeroProps> = ({
@@ -16,95 +18,95 @@ export const Hero: React.FC<HeroProps> = ({
   hotels,
   selectedHotelId,
   onSelectHotel,
-  onSearchRooms,
   onOpenBooking,
+  onOpenWeChat,
 }) => {
-  const [bookingType, setBookingType] = useState<BookingType>('daily');
-  const [targetHotelId, setTargetHotelId] = useState<string>(selectedHotelId || 'all');
-  const [checkInDate, setCheckInDate] = useState<string>(
-    new Date().toISOString().split('T')[0]
-  );
-  const [checkOutDate, setCheckOutDate] = useState<string>(() => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    return tomorrow.toISOString().split('T')[0];
-  });
-  const [guestsCount, setGuestsCount] = useState<number>(2);
-
   const activeHotel = hotels.find((h) => h.id === selectedHotelId) || hotels[0];
 
-  const t = {
+  const translations = {
     vi: {
-      badge: 'Bình chọn Khách sạn Boutique được yêu thích tại Thảo Điền 2025',
-      mainTitle: 'Trải nghiệm lưu trú đầy tinh tế gần thảo điền, TP Hồ Chí Minh',
-      subTitle: 'Hệ thống 3 cơ sở lưu trú cao cấp tại An Khánh & Thảo Điền: Indochine Casa cổ điển lãng mạn, Chinchu Luxury hiện đại đẳng cấp và Chinchu Stay năng động trên phố Tây Xuân Thủy.',
+      badge: 'Hệ thống cơ sở lưu trú tại An Khánh & Thảo Điền',
+      mainTitle: 'Trải nghiệm lưu trú đầy tinh tế gần Thảo Điền, TP Hồ Chí Minh',
+      subTitle: 'Hệ thống cơ sở lưu trú tại An Khánh & Thảo Điền. Indochine Casa cổ điển lãng mạn, Chinchu Luxury hiện đại tiện ích và Chinchu Stay năng động thân thiện giữa trung tâm Hồ Chí Minh.',
+      pricingHeadline: 'Indochine giá chỉ từ 600.000đ /đêm - Chinchu Stay chỉ 600.000đ /đêm - Chinchu Luxury Hotel chỉ từ 700.000đ /đêm',
+      pricingSub: 'Quý khách xem thông tin phòng trên website và gọi điện trực tiếp hotline để lễ tân hỗ trợ đặt phòng nhanh nhất.',
       googleRating: '4.9/5 trên Google Maps (850+ đánh giá xác thực)',
-      tabAll: 'Khám phá cả 3 cơ sở',
-      labelHotel: 'Cơ sở khách sạn',
-      allHotelsOption: 'Tất cả 3 cơ sở (Thảo Điền)',
-      labelBookingType: 'Hình thức thuê',
-      daily: 'Theo đêm (Overnight)',
-      hourly: 'Theo giờ (Từ 2h)',
-      monthly: 'Theo tháng / Dài hạn',
-      labelCheckIn: 'Ngày nhận phòng',
-      labelCheckOut: 'Ngày trả phòng',
-      labelGuests: 'Số khách',
-      guestOption1: '1 Khách (Solo)',
-      guestOption2: '2 Khách (Cặp đôi)',
-      guestOption3: '3-4 Khách (Gia đình / Bạn bè)',
-      ctaSearch: 'Tìm Phòng & Xem Giá Trực Tiếp',
+      ctaSearch: 'Gọi Đặt Phòng Trực Tiếp',
+      ctaViewRooms: 'Xem Ảnh Tham Khảo & Tiện Ích',
+      branch1Title: '📍 1. Indochine Casa Hotel (04 Thái Ly)',
+      branch2Title: '📍 2. Chinchu Stay (46 Nguyễn Cừ & 24 Xuân Thủy)',
+      branchLocation: 'Thảo Điền, TP. Thủ Đức (TP.HCM)',
       perk1: 'Cam kết mức giá trực tiếp tốt nhất',
       perk2: 'Hỗ trợ nhận phòng sớm linh hoạt',
       perk3: 'Không cần thẻ tín dụng quốc tế',
-      perk4: 'Lễ tân 24/7 & Hỗ trợ Zalo tức thì',
-      quickCall: 'Gọi Hotline Giữ Phòng Ngay',
-      viewLocations: 'Xem 3 địa chỉ trên Google Maps',
-      branch1Contact: 'Indochine Casa (04 Thái Ly)',
-      branch2Contact: 'Chinchu Stay (46 Nguyễn Cừ & 24 Xuân Thủy)',
+      perk4: 'Lễ tân 24/7 & Hỗ trợ đa kênh tức thì',
+      chatZalo: 'Zalo',
+      chatWhatsApp: 'WhatsApp',
+      chatWeChat: 'WeChat',
     },
     en: {
-      badge: 'Top-rated Boutique Hospitality in Thao Dien, District 2 (2025)',
+      badge: 'Hospitality System • An Khanh & Thao Dien',
       mainTitle: 'Refined Boutique Stays in the Heart of Thao Dien',
-      subTitle: '3 premier properties in Thao Dien & An Khanh: Indochine Casa vintage romance, Chinchu Luxury executive suites, and Chinchu Stay right on iconic Xuan Thuy dining strip.',
+      subTitle: 'Boutique hospitality system in An Khanh & Thao Dien. Indochine Casa classic romance, Chinchu Luxury contemporary comfort, and Chinchu Stay vibrant and friendly in the heart of Ho Chi Minh City.',
+      pricingHeadline: 'Indochine from 600,000 VND / night - Chinchu Stay from 600,000 VND / night - Chinchu Luxury Hotel from 700,000 VND / night',
+      pricingSub: 'Browse room photos and call front desk directly for instant reservation & best rates',
       googleRating: '4.9/5 on Google Maps (850+ verified reviews)',
-      tabAll: 'Explore all 3 locations',
-      labelHotel: 'Hotel Property',
-      allHotelsOption: 'All 3 Properties (Thao Dien)',
-      labelBookingType: 'Stay Type',
-      daily: 'Overnight Stay',
-      hourly: 'Hourly (From 2 hours)',
-      monthly: 'Monthly / Extended',
-      labelCheckIn: 'Check-in Date',
-      labelCheckOut: 'Check-out Date',
-      labelGuests: 'Guests',
-      guestOption1: '1 Guest (Solo)',
-      guestOption2: '2 Guests (Couple)',
-      guestOption3: '3-4 Guests (Group/Family)',
-      ctaSearch: 'Search Rooms & Best Rates',
+      ctaSearch: 'Call Front Desk (24/7 Hotline)',
+      ctaViewRooms: 'Browse Photos & Room Types',
+      branch1Title: '📍 1. Indochine Casa Hotel (04 Thai Ly)',
+      branch2Title: '📍 2. Chinchu Stay (46 Nguyen Cu & 24 Xuan Thuy)',
+      branchLocation: 'Thao Dien, Thu Duc City (HCMC)',
       perk1: 'Guaranteed Best Direct Rate',
       perk2: 'Complimentary early check-in (upon availability)',
       perk3: 'Zero credit card prepayment needed',
-      perk4: '24/7 Front Desk & instant WhatsApp support',
-      quickCall: 'Call Reception to Reserve',
-      viewLocations: 'Explore 3 locations on Maps',
-      branch1Contact: 'Indochine Casa (04 Thai Ly)',
-      branch2Contact: 'Chinchu Stay (46 Nguyen Cu & 24 Xuan Thuy)',
+      perk4: '24/7 Front Desk & instant multi-channel support',
+      chatZalo: 'Zalo',
+      chatWhatsApp: 'WhatsApp',
+      chatWeChat: 'WeChat',
     },
-  }[language];
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSearchRooms({
-      hotelId: targetHotelId,
-      bookingType,
-      checkInDate,
-      checkOutDate,
-    });
-    const roomsSection = document.getElementById('rooms');
-    if (roomsSection) {
-      roomsSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    ko: {
+      badge: '호치민 안칸 & 타오디엔 부티크 숙소',
+      mainTitle: '호치민시 타오디엔 중심의 품격 있는 부티크 스테이',
+      subTitle: '안칸 & 타오디엔 호텔 시스템. 클래식 로맨스의 인도차이나 카사, 모던 럭셔리의 친추 럭셔리, 활기찬 도심의 친추 스테이.',
+      pricingHeadline: '인도차이나 1박 600,000동부터 - 친추 스테이 600,000동부터 - 친추 럭셔리 700,000동부터',
+      pricingSub: '웹사이트에서 객실 정보를 둘러보시고 전화로 간편하게 예약하세요',
+      googleRating: 'Google 지도 4.9/5 (850개 이상의 실제 후기)',
+      ctaSearch: '전화로 바로 예약하기 (24/7)',
+      ctaViewRooms: '객실 사진 & 타입 보기',
+      branch1Title: '📍 1. 인도차이나 카사 (04 Thai Ly)',
+      branch2Title: '📍 2. 친추 스테이 (46 Nguyen Cu & 24 Xuan Thuy)',
+      branchLocation: '호치민시 투득시 타오디엔',
+      perk1: '공식 직영 최저가 보장',
+      perk2: '얼리 체크인 우선 지원',
+      perk3: '해외 신용카드 선결제 불필요',
+      perk4: '24시간 프런트 데스크 & 메신저 상담',
+      chatZalo: 'Zalo',
+      chatWhatsApp: 'WhatsApp',
+      chatWeChat: '위챗 (WeChat)',
+    },
+    zh: {
+      badge: '胡志明市安庆与草田精品旅宿',
+      mainTitle: '胡志明市第二郡草田 雅致典雅居停体验',
+      subTitle: '安庆与草田精品酒店体系：经典法式印支风情 Indochine Casa、现代轻奢商务 Chinchu Luxury，以及位于核心商业街的 Chinchu Stay。',
+      pricingHeadline: 'Indochine 每晚 600,000 越南盾起 - Chinchu Stay 600,000 越南盾起 - Chinchu Luxury 700,000 越南盾起',
+      pricingSub: '在网站查看房型详情后，直接致电前台热线办理预订',
+      googleRating: '谷歌地图 4.9/5（850+ 条真实住客好评）',
+      ctaSearch: '致电前台直订房间 (24/7)',
+      ctaViewRooms: '查看客房实景与房型',
+      branch1Title: '📍 1. Indochine Casa (蔡莉街04号)',
+      branch2Title: '📍 2. Chinchu Stay (阮巨街46号 & 春水街24号)',
+      branchLocation: '胡志明市守德市草田坊',
+      perk1: '官方直订全网最低价保证',
+      perk2: '视房态优先安排提前入住',
+      perk3: '无需信用卡预付，到店付款',
+      perk4: '24小时前台服务与即时在线咨询',
+      chatZalo: 'Zalo',
+      chatWhatsApp: 'WhatsApp',
+      chatWeChat: '微信 (WeChat)',
+    },
   };
+
+  const t = translations[language] || translations.vi;
 
   return (
     <section className="relative overflow-hidden bg-stone-950 text-white pt-8 pb-16 lg:pt-14 lg:pb-24">
@@ -118,9 +120,9 @@ export const Hero: React.FC<HeroProps> = ({
         <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/70 to-stone-900/60" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
         {/* Top Badges */}
-        <div className="flex flex-wrap items-center gap-3 mb-6">
+        <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-semibold backdrop-blur-md">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>{t.badge}</span>
@@ -137,51 +139,77 @@ export const Hero: React.FC<HeroProps> = ({
         </div>
 
         {/* Main Hero Typography */}
-        <div className="max-w-3xl mb-8">
+        <div className="max-w-3xl mx-auto mb-8 flex flex-col items-center">
           <h1 className="font-serif-luxury text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-tight mb-4">
             {t.mainTitle}
           </h1>
-          <p className="text-stone-300 text-base sm:text-lg leading-relaxed font-light mb-6">
+          <p className="text-stone-300 text-base sm:text-lg leading-relaxed font-light mb-6 max-w-2xl">
             {t.subTitle}
           </p>
 
           {/* Quick hotel pill selector */}
-          <div className="flex flex-wrap items-center gap-2 mb-4">
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
             {hotels.map((h) => {
               const isSelected = selectedHotelId === h.id;
               return (
                 <button
                   key={h.id}
-                  onClick={() => {
-                    onSelectHotel(h.id);
-                    setTargetHotelId(h.id);
-                  }}
-                  className={`px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 cursor-pointer ${
+                  onClick={() => onSelectHotel(h.id)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                     isSelected
-                      ? 'bg-amber-600 text-white shadow-lg shadow-amber-900/50 border border-amber-400'
-                      : 'bg-stone-900/80 text-stone-300 hover:bg-stone-800 border border-stone-700'
+                      ? 'bg-amber-600 text-white shadow-md ring-2 ring-amber-400/50'
+                      : 'bg-stone-900/70 text-stone-300 hover:bg-stone-800 hover:text-white border border-stone-700'
                   }`}
                 >
-                  <span className="w-5 h-5 rounded-md bg-white p-0.5 inline-flex items-center justify-center shrink-0 shadow-xs">
-                    <img src={h.logoUrl} alt="" className="w-full h-full object-contain" />
-                  </span>
-                  <span>{h.name}</span>
+                  {h.name}
                 </button>
               );
             })}
           </div>
 
-          {/* 2 Quick Hotline & Zalo Contact Badges */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-            <div className="bg-stone-900/90 border border-emerald-800/60 rounded-2xl p-3 backdrop-blur-md">
-              <div className="text-amber-400 font-bold text-xs uppercase tracking-wider mb-1">
-                📍 1. Indochine Casa Hotel (04 Thái Ly)
+          {/* Direct Booking Headline Banner */}
+          <div className="bg-amber-950/80 border border-amber-600/60 rounded-2xl p-4 mb-6 backdrop-blur-md w-full max-w-2xl">
+            <div className="text-amber-300 font-bold text-sm sm:text-base leading-snug mb-1">
+              ✨ {t.pricingHeadline}
+            </div>
+            <p className="text-stone-300 text-xs sm:text-sm">
+              {t.pricingSub}
+            </p>
+          </div>
+
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md mb-8">
+            <button
+              onClick={() => onOpenBooking(selectedHotelId)}
+              className="w-full sm:w-auto flex-1 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-700 to-amber-900 hover:from-amber-800 hover:to-stone-900 text-white font-bold text-sm shadow-xl flex items-center justify-center gap-2 transition-all cursor-pointer"
+            >
+              <Phone className="w-4 h-4 text-amber-300" />
+              <span>{t.ctaSearch}</span>
+            </button>
+            <a
+              href="#rooms"
+              className="w-full sm:w-auto flex-1 py-3.5 px-6 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm backdrop-blur-md flex items-center justify-center gap-2 transition-colors"
+            >
+              <span>{t.ctaViewRooms}</span>
+              <ArrowRight className="w-4 h-4 text-amber-300" />
+            </a>
+          </div>
+
+          {/* 2 Quick Multi-channel Contact Badges (Hotline, Zalo, WhatsApp, WeChat) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8 w-full max-w-2xl text-left">
+            {/* Branch 1: Indochine Casa */}
+            <div className="bg-stone-900/90 border border-emerald-800/60 rounded-2xl p-3.5 backdrop-blur-md flex flex-col justify-between">
+              <div>
+                <div className="text-amber-400 font-bold text-xs uppercase tracking-wider mb-1">
+                  {t.branch1Title}
+                </div>
+                <div className="text-[11px] text-stone-300 mb-3">{t.branchLocation}</div>
               </div>
-              <div className="text-[11px] text-stone-300 mb-2">Thảo Điền, TP. Thủ Đức (TP.HCM)</div>
-              <div className="flex items-center gap-2">
+              <div className="grid grid-cols-2 gap-1.5">
                 <a
                   href="tel:+84708570838"
-                  className="flex-1 py-1.5 px-3 rounded-lg bg-emerald-800 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  className="py-1.5 px-2 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  title="Gọi +84 708 570 838"
                 >
                   <Phone className="w-3.5 h-3.5 text-amber-300" />
                   <span>+84 708 570 838</span>
@@ -190,23 +218,49 @@ export const Hero: React.FC<HeroProps> = ({
                   href="https://zalo.me/0708570838"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-1.5 px-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  className="py-1.5 px-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  title="Zalo +84 708 570 838"
                 >
-                  <MessageCircle className="w-3.5 h-3.5" />
-                  <span>Zalo</span>
+                  <ZaloIcon className="w-3.5 h-3.5" />
+                  <span>{t.chatZalo}</span>
                 </a>
+                <a
+                  href="https://wa.me/84708570838"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="py-1.5 px-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  title="WhatsApp +84 708 570 838"
+                >
+                  <WhatsAppIcon className="w-3.5 h-3.5" />
+                  <span>{t.chatWhatsApp}</span>
+                </a>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onOpenWeChat) onOpenWeChat('indochine');
+                  }}
+                  className="py-1.5 px-2 rounded-xl bg-[#07C160] hover:bg-[#059648] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  title="WeChat ID: 0708570838"
+                >
+                  <WeChatIcon className="w-3.5 h-3.5" />
+                  <span>{t.chatWeChat}</span>
+                </button>
               </div>
             </div>
 
-            <div className="bg-stone-900/90 border border-emerald-800/60 rounded-2xl p-3 backdrop-blur-md">
-              <div className="text-amber-400 font-bold text-xs uppercase tracking-wider mb-1">
-                📍 2. Chinchu Stay (46 Nguyễn Cừ & 24 Xuân Thủy)
+            {/* Branch 2: Chinchu Stay */}
+            <div className="bg-stone-900/90 border border-emerald-800/60 rounded-2xl p-3.5 backdrop-blur-md flex flex-col justify-between">
+              <div>
+                <div className="text-amber-400 font-bold text-xs uppercase tracking-wider mb-1">
+                  {t.branch2Title}
+                </div>
+                <div className="text-[11px] text-stone-300 mb-3">{t.branchLocation}</div>
               </div>
-              <div className="text-[11px] text-stone-300 mb-2">Thảo Điền, TP. Thủ Đức (TP.HCM)</div>
-              <div className="flex items-center gap-2">
+              <div className="grid grid-cols-2 gap-1.5">
                 <a
                   href="tel:+84966572935"
-                  className="flex-1 py-1.5 px-3 rounded-lg bg-emerald-800 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  className="py-1.5 px-2 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  title="Gọi +84 966 572 935"
                 >
                   <Phone className="w-3.5 h-3.5 text-amber-300" />
                   <span>+84 966 572 935</span>
@@ -215,119 +269,53 @@ export const Hero: React.FC<HeroProps> = ({
                   href="https://zalo.me/0966572935"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-1.5 px-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  className="py-1.5 px-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  title="Zalo +84 966 572 935"
                 >
-                  <MessageCircle className="w-3.5 h-3.5" />
-                  <span>Zalo</span>
+                  <ZaloIcon className="w-3.5 h-3.5" />
+                  <span>{t.chatZalo}</span>
                 </a>
+                <a
+                  href="https://wa.me/84966572935"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="py-1.5 px-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  title="WhatsApp +84 966 572 935"
+                >
+                  <WhatsAppIcon className="w-3.5 h-3.5" />
+                  <span>{t.chatWhatsApp}</span>
+                </a>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onOpenWeChat) onOpenWeChat('chinchu');
+                  }}
+                  className="py-1.5 px-2 rounded-xl bg-[#07C160] hover:bg-[#059648] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  title="WeChat ID: 0966572935"
+                >
+                  <WeChatIcon className="w-3.5 h-3.5" />
+                  <span>{t.chatWeChat}</span>
+                </button>
               </div>
             </div>
           </div>
-        </div>
-
-        {/* High Converting Direct Booking Engine Box */}
-        <div className="bg-white/95 backdrop-blur-xl rounded-2xl p-4 sm:p-6 shadow-2xl border border-stone-200 text-stone-900">
-          <form onSubmit={handleSearch} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-end">
-            {/* 1. Chọn khách sạn */}
-            <div className="lg:col-span-1">
-              <label className="block text-xs font-bold text-stone-600 uppercase tracking-wider mb-1">
-                {t.labelHotel}
-              </label>
-              <div className="relative">
-                <select
-                  value={targetHotelId}
-                  onChange={(e) => {
-                    setTargetHotelId(e.target.value);
-                    if (e.target.value !== 'all') {
-                      onSelectHotel(e.target.value);
-                    }
-                  }}
-                  className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2.5 text-sm font-medium text-stone-900 focus:ring-2 focus:ring-amber-700 focus:outline-hidden"
-                >
-                  <option value="all">{t.allHotelsOption}</option>
-                  {hotels.map((h) => (
-                    <option key={h.id} value={h.id}>
-                      {h.name} ({h.address})
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* 2. Check-in Date */}
-            <div>
-              <label className="block text-xs font-bold text-stone-600 uppercase tracking-wider mb-1">
-                {t.labelCheckIn}
-              </label>
-              <div className="relative">
-                <input
-                  type="date"
-                  value={checkInDate}
-                  min={new Date().toISOString().split('T')[0]}
-                  onChange={(e) => setCheckInDate(e.target.value)}
-                  className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2.5 text-sm font-medium text-stone-900 focus:ring-2 focus:ring-amber-700 focus:outline-hidden"
-                />
-              </div>
-            </div>
-
-            {/* 3. Check-out Date */}
-            <div>
-              <label className="block text-xs font-bold text-stone-600 uppercase tracking-wider mb-1">
-                {t.labelCheckOut}
-              </label>
-              <input
-                type="date"
-                value={checkOutDate}
-                min={checkInDate}
-                onChange={(e) => setCheckOutDate(e.target.value)}
-                className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2.5 text-sm font-medium text-stone-900 focus:ring-2 focus:ring-amber-700 focus:outline-hidden"
-              />
-            </div>
-
-            {/* 4. Số khách */}
-            <div>
-              <label className="block text-xs font-bold text-stone-600 uppercase tracking-wider mb-1">
-                {t.labelGuests}
-              </label>
-              <select
-                value={guestsCount}
-                onChange={(e) => setGuestsCount(Number(e.target.value))}
-                className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2.5 text-sm font-medium text-stone-900 focus:ring-2 focus:ring-amber-700 focus:outline-hidden"
-              >
-                <option value={1}>{t.guestOption1}</option>
-                <option value={2}>{t.guestOption2}</option>
-                <option value={3}>{t.guestOption3}</option>
-              </select>
-            </div>
-
-            {/* 5. Submit Button */}
-            <div>
-              <button
-                type="submit"
-                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-700 to-amber-900 hover:from-amber-800 hover:to-stone-950 text-white font-bold text-sm shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <span>{t.ctaSearch}</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          </form>
 
           {/* Value Props Strip */}
-          <div className="mt-4 pt-4 border-t border-stone-200 grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-stone-600">
-            <div className="flex items-center gap-1.5">
-              <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span className="font-semibold text-stone-800">{t.perk1}</span>
+          <div className="pt-4 border-t border-stone-800/80 grid grid-cols-2 md:grid-cols-4 gap-3 text-xs text-stone-300 w-full max-w-2xl">
+            <div className="flex items-center justify-center sm:justify-start gap-1.5">
+              <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span className="font-semibold text-stone-100">{t.perk1}</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+            <div className="flex items-center justify-center sm:justify-start gap-1.5">
+              <Check className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>{t.perk2}</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+            <div className="flex items-center justify-center sm:justify-start gap-1.5">
+              <Check className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>{t.perk3}</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+            <div className="flex items-center justify-center sm:justify-start gap-1.5">
+              <Check className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>{t.perk4}</span>
             </div>
           </div>

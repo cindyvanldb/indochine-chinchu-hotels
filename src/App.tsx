@@ -1,3 +1,4 @@
+// Indochine Casa & Chinchu Hotels - Boutique Hospitality in Thao Dien
 import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
@@ -11,6 +12,7 @@ import { Footer } from './components/Footer';
 import { DirectBookingModal } from './components/DirectBookingModal';
 import { RoomDetailModal } from './components/RoomDetailModal';
 import { FloatingActionBar } from './components/FloatingActionBar';
+import { WeChatModal } from './components/WeChatModal';
 import { HOTELS_DATA, ROOMS_DATA, REVIEWS_DATA, FAQS_DATA } from './data/hotels';
 import { Language, RoomType, BookingType } from './types';
 
@@ -22,11 +24,18 @@ export default function App() {
   const [bookingPrefillHotelId, setBookingPrefillHotelId] = useState<string>('indochine-casa');
   const [bookingPrefillRoomId, setBookingPrefillRoomId] = useState<string>('');
   const [detailRoom, setDetailRoom] = useState<RoomType | null>(null);
+  const [isWeChatModalOpen, setIsWeChatModalOpen] = useState<boolean>(false);
+  const [weChatModalBranch, setWeChatModalBranch] = useState<'indochine' | 'chinchu'>('indochine');
 
   const handleOpenBooking = (hotelId?: string, roomId?: string) => {
     if (hotelId) setBookingPrefillHotelId(hotelId);
     if (roomId) setBookingPrefillRoomId(roomId);
     setIsBookingModalOpen(true);
+  };
+
+  const handleOpenWeChat = (branch?: 'indochine' | 'chinchu') => {
+    if (branch) setWeChatModalBranch(branch);
+    setIsWeChatModalOpen(true);
   };
 
   const handleBookRoom = (room: RoomType) => {
@@ -67,7 +76,7 @@ export default function App() {
       addressRegion: 'TP. Hồ Chí Minh',
       addressCountry: 'VN',
     },
-    telephone: '+84909234568',
+    telephone: '+84708570838',
     priceRange: '300.000đ - 1.250.000đ',
     aggregateRating: {
       '@type': 'AggregateRating',
@@ -84,12 +93,13 @@ export default function App() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdData) }}
       />
 
-      {/* 1. Header & Navigation */}
+      {/* 1. Header & Navigation (Supports VIỆT, ANH, HÀN, TRUNG in dedicated row) */}
       <Header
         language={language}
         onLanguageChange={setLanguage}
         onOpenBooking={() => handleOpenBooking()}
         hotels={HOTELS_DATA}
+        onOpenWeChat={handleOpenWeChat}
       />
 
       {/* 2. Google Ads High-Converting Hero Section */}
@@ -100,6 +110,7 @@ export default function App() {
         onSelectHotel={setSelectedHotelId}
         onSearchRooms={handleSearchRooms}
         onOpenBooking={handleOpenBooking}
+        onOpenWeChat={handleOpenWeChat}
       />
 
       {/* 3. 3 Properties Side-by-side Showcase */}
@@ -110,6 +121,7 @@ export default function App() {
         onSelectHotel={setSelectedHotelId}
         onOpenBooking={handleOpenBooking}
         onFilterRoomsByHotel={(hId) => setRoomFilterHotelId(hId)}
+        onOpenWeChat={handleOpenWeChat}
       />
 
       {/* 4. Filterable Rooms Catalog & Direct Rates */}
@@ -121,6 +133,7 @@ export default function App() {
         onFilterChange={setRoomFilterHotelId}
         onSelectRoomDetail={handleSelectRoomDetail}
         onBookRoom={handleBookRoom}
+        onOpenWeChat={handleOpenWeChat}
       />
 
       {/* 5. Direct Booking Value Props / Why Book Direct */}
@@ -133,6 +146,7 @@ export default function App() {
       <LocationMapSection
         language={language}
         hotels={HOTELS_DATA}
+        onOpenWeChat={handleOpenWeChat}
       />
 
       {/* 7. Verified Guest Testimonials & Reviews */}
@@ -146,6 +160,7 @@ export default function App() {
       <FaqSection
         language={language}
         faqs={FAQS_DATA}
+        onOpenWeChat={handleOpenWeChat}
       />
 
       {/* 9. Footer */}
@@ -153,6 +168,7 @@ export default function App() {
         language={language}
         hotels={HOTELS_DATA}
         onOpenBooking={handleOpenBooking}
+        onOpenWeChat={handleOpenWeChat}
       />
 
       {/* 10. Direct Booking Engine Modal */}
@@ -164,6 +180,7 @@ export default function App() {
         rooms={ROOMS_DATA}
         initialHotelId={bookingPrefillHotelId}
         initialRoomId={bookingPrefillRoomId}
+        onOpenWeChat={handleOpenWeChat}
       />
 
       {/* 11. Room Details & Photo Gallery Modal */}
@@ -173,6 +190,7 @@ export default function App() {
         language={language}
         onClose={() => setDetailRoom(null)}
         onBookRoom={handleBookRoom}
+        onOpenWeChat={handleOpenWeChat}
       />
 
       {/* 12. Mobile Bottom Conversion Bar & Desktop Speed Dial */}
@@ -181,6 +199,15 @@ export default function App() {
         onOpenBooking={() => handleOpenBooking()}
         hotels={HOTELS_DATA}
         selectedHotelId={selectedHotelId}
+        onOpenWeChat={handleOpenWeChat}
+      />
+
+      {/* 13. Dedicated WeChat Connect Modal */}
+      <WeChatModal
+        isOpen={isWeChatModalOpen}
+        onClose={() => setIsWeChatModalOpen(false)}
+        language={language}
+        initialBranch={weChatModalBranch}
       />
     </div>
   );

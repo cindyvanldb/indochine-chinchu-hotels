@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { X, Calendar, Clock, Phone, MessageCircle, CheckCircle2, ShieldCheck, Tag, Sparkles, Copy, Printer, ArrowRight } from 'lucide-react';
-import { Language, HotelProperty, RoomType, BookingType, BookingFormState, ConfirmedBookingVoucher } from '../types';
+import React from 'react';
+import { X, Phone, MessageCircle, MapPin, Sparkles, ShieldCheck, Clock, CheckCircle2 } from 'lucide-react';
+import { Language, HotelProperty, RoomType } from '../types';
+import { getLocalizedText } from '../utils/i18n';
+import { WhatsAppIcon, WeChatIcon, ZaloIcon } from './ContactIcons';
 
 interface DirectBookingModalProps {
   isOpen: boolean;
@@ -10,6 +12,7 @@ interface DirectBookingModalProps {
   rooms: RoomType[];
   initialHotelId?: string;
   initialRoomId?: string;
+  onOpenWeChat?: (branch?: 'indochine' | 'chinchu') => void;
 }
 
 export const DirectBookingModal: React.FC<DirectBookingModalProps> = ({
@@ -20,639 +23,377 @@ export const DirectBookingModal: React.FC<DirectBookingModalProps> = ({
   rooms,
   initialHotelId,
   initialRoomId,
+  onOpenWeChat,
 }) => {
-  const [hotelId, setHotelId] = useState<string>(initialHotelId || hotels[0]?.id || 'indochine-casa');
-  const [roomTypeId, setRoomTypeId] = useState<string>(initialRoomId || '');
-  const [bookingType, setBookingType] = useState<BookingType>('daily');
-  const [checkInDate, setCheckInDate] = useState<string>(new Date().toISOString().split('T')[0]);
-  const [checkOutDate, setCheckOutDate] = useState<string>(() => {
-    const d = new Date();
-    d.setDate(d.getDate() + 1);
-    return d.toISOString().split('T')[0];
-  });
-  const [checkInTime, setCheckInTime] = useState<string>('14:00');
-  const [hoursCount, setHoursCount] = useState<number>(2);
-  const [adults, setAdults] = useState<number>(2);
-  const [children, setChildren] = useState<number>(0);
-  const [guestName, setGuestName] = useState<string>('');
-  const [guestPhone, setGuestPhone] = useState<string>('');
-  const [guestEmail, setGuestEmail] = useState<string>('');
-  const [specialRequests, setSpecialRequests] = useState<string>('');
-  const [promoCode, setPromoCode] = useState<string>('DIRECT15');
-  const [promoApplied, setPromoApplied] = useState<boolean>(true);
-  const [voucher, setVoucher] = useState<ConfirmedBookingVoucher | null>(null);
-  const [copiedCode, setCopiedCode] = useState<boolean>(false);
-
-  // Sync initial props
-  useEffect(() => {
-    if (initialHotelId) setHotelId(initialHotelId);
-    if (initialRoomId) setRoomTypeId(initialRoomId);
-  }, [initialHotelId, initialRoomId]);
-
-  // Available rooms for selected hotel
-  const availableRooms = rooms.filter((r) => r.hotelId === hotelId);
-
-  // Auto select first room if roomTypeId is not in availableRooms
-  useEffect(() => {
-    if (!availableRooms.some((r) => r.id === roomTypeId) && availableRooms.length > 0) {
-      setRoomTypeId(availableRooms[0].id);
-    }
-  }, [hotelId, availableRooms, roomTypeId]);
-
-  const selectedHotel = hotels.find((h) => h.id === hotelId) || hotels[0];
-  const selectedRoom = availableRooms.find((r) => r.id === roomTypeId) || availableRooms[0];
-
-  // Calculate pricing
-  const calculateTotal = () => {
-    if (!selectedRoom) return { total: 0, nights: 1 };
-
-    let total = 0;
-    let nights = 1;
-
-    if (bookingType === 'daily') {
-      const d1 = new Date(checkInDate);
-      const d2 = new Date(checkOutDate);
-      const diffTime = Math.max(d2.getTime() - d1.getTime(), 86400000);
-      nights = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
-      total = selectedRoom.dailyPrice * nights;
-    } else if (bookingType === 'hourly') {
-      const additionalHours = Math.max(0, hoursCount - 2);
-      total = selectedRoom.hourlyPrice + additionalHours * selectedRoom.hourlyAdditional;
-    } else if (bookingType === 'monthly') {
-      total = selectedRoom.monthlyPrice || selectedRoom.dailyPrice * 22;
-    }
-
-    return { total, nights };
-  };
-
-  const { total, nights } = calculateTotal();
-
   if (!isOpen) return null;
 
-  const isIndochine = selectedHotel.id === 'indochine-casa';
-  const branchPhoneDisplay = isIndochine ? '+84 708 570 838' : '+84 966 572 935';
-  const branchPhoneHref = isIndochine ? 'tel:+84708570838' : 'tel:+84966572935';
-  const branchZaloHref = isIndochine ? 'https://zalo.me/0708570838' : 'https://zalo.me/0966572935';
+  const preselectedHotel = hotels.find((h) => h.id === initialHotelId) || hotels[0];
+  const preselectedRoom = rooms.find((r) => r.id === initialRoomId);
 
-  const t = {
+  const translations = {
     vi: {
-      modalTitle: 'Phiếu Đặt Phòng Trực Tiếp Giá Tốt Nhất',
-      modalSubtitle: 'Giữ phòng tức thì • Không cần cọc thẻ tín dụng • Xác nhận qua Zalo / Hotline 24/7',
-      tabDaily: 'Đặt theo đêm',
-      tabHourly: 'Đặt theo giờ (2h+)',
-      tabMonthly: 'Lưu trú theo tháng',
-      labelHotel: 'Chọn cơ sở',
-      labelRoom: 'Chọn hạng phòng',
-      labelCheckIn: 'Ngày nhận phòng',
-      labelCheckOut: 'Ngày trả phòng',
-      labelCheckInTime: 'Giờ nhận phòng dự kiến',
-      labelHoursCount: 'Số giờ lưu trú',
-      labelGuests: 'Số lượng khách',
-      labelName: 'Họ và tên quý khách',
-      labelPhone: 'Số điện thoại / Zalo nhận xác nhận',
-      labelEmail: 'Email (không bắt buộc)',
-      labelRequests: 'Yêu cầu đặc biệt (Bồn tắm, check-in sớm, hóa đơn VAT...)',
-      pricePerNightFrom: 'Giá theo đêm từ:',
-      priceSummary: 'Tóm tắt chi phí dự kiến',
-      totalEst: 'Tổng thanh toán tại khách sạn:',
-      payAtHotelNotice: 'Thanh toán trực tiếp khi nhận phòng (Tiền mặt, Chuyển khoản, Thẻ).',
-      btnSubmit: 'Hoàn Tất Đặt Phòng Ngay',
-      btnCallDirect: 'Gọi Lễ Tân Đặt Nhanh',
-      voucherSuccessTitle: 'ĐẶT PHÒNG THÀNH CÔNG!',
-      voucherSubtitle: 'Lễ tân đã ghi nhận thông tin và sẵn sàng đón tiếp quý khách.',
-      voucherCode: 'Mã đặt phòng:',
-      voucherNotice: 'Quý khách vui lòng lưu lại mã này hoặc nhấn nút gửi Zalo bên dưới để lễ tân xác nhận phòng ngay.',
-      sendZalo: 'Gửi qua Zalo Lễ Tân',
-      sendWhatsApp: 'Gửi qua WhatsApp',
-      copyCode: 'Sao chép mã',
-      copied: 'Đã sao chép!',
-      close: 'Đóng',
+      badge: 'Hotline Đặt Phòng Trực Tiếp',
+      title: 'Gọi Điện Đặt Phòng Trực Tiếp 24/7',
+      subtitle: 'Quý khách vui lòng gọi điện thoại trực tiếp hoặc nhắn tin Zalo / WhatsApp / WeChat đến lễ tân để được tư vấn giá ưu đãi và giữ phòng ngay tức thì.',
+      viewingRoom: 'Quý khách đang quan tâm:',
+      branch1Badge: 'Cơ sở 1',
+      branch2Badge: 'Cơ sở 2 & 3',
+      branchIndochineTitle: '1. Indochine Casa Hotel',
+      branchIndochineAddress: '04 Thái Ly, P. Thảo Điền, TP. Thủ Đức, TP. Hồ Chí Minh',
+      branchIndochinePhone: '+84 708 570 838',
+      branchIndochineDesc: 'Phong cách Đông Dương sang trọng • Bồn tắm thư giãn cao cấp • Ban công ngập tràn ánh sáng',
+      branchChinchuTitle: '2. Chinchu Luxury & Chinchu Stay',
+      branchChinchuAddress: '46 Nguyễn Cừ & 24 Xuân Thủy, P. Thảo Điền, TP. Thủ Đức, TP. Hồ Chí Minh',
+      branchChinchuPhone: '+84 966 572 935',
+      branchChinchuDesc: 'Hiện đại sầm uất ngay trung tâm phố đi bộ Xuân Thủy & khu ẩm thực Thảo Điền',
+      callNowBtn: 'Gọi hotline',
+      chatZaloBtn: 'Zalo',
+      chatWhatsAppBtn: 'WhatsApp',
+      chatWeChatBtn: 'WeChat',
+      perksTitle: 'Đặc Quyền Khi Gọi Điện Đặt Phòng Trực Tiếp:',
+      perk1: 'Lễ tân trực 24/7 giải đáp & xác nhận phòng ngay',
+      perk2: 'Ưu tiên chọn tầng cao, view thoáng hoặc phòng bồn tắm',
+      perk3: 'Không cần thẻ tín dụng, thanh toán khi nhận phòng',
+      perk4: 'Hỗ trợ nhận phòng sớm linh hoạt theo tình trạng phòng',
+      receptionNotice: 'Lễ tân phục vụ 24/7 tất cả các ngày trong tuần',
+      closeBtn: 'Đóng',
     },
     en: {
-      modalTitle: 'Direct Booking Engine — Best Rate Guaranteed',
-      modalSubtitle: 'Instant Reservation • No Credit Card Prepayment Required • Confirmed via WhatsApp/Hotline',
-      tabDaily: 'Overnight Stay',
-      tabHourly: 'Hourly Stay (2h+)',
-      tabMonthly: 'Monthly Long Stay',
-      labelHotel: 'Select Property',
-      labelRoom: 'Select Room Type',
-      labelCheckIn: 'Check-in Date',
-      labelCheckOut: 'Check-out Date',
-      labelCheckInTime: 'Expected Arrival Time',
-      labelHoursCount: 'Hours of Stay',
-      labelGuests: 'Guests',
-      labelName: 'Full Name',
-      labelPhone: 'Phone / WhatsApp / Zalo',
-      labelEmail: 'Email (Optional)',
-      labelRequests: 'Special Requests (Bathtub, early check-in, VAT invoice...)',
-      pricePerNightFrom: 'Price per night from:',
-      priceSummary: 'Estimated Price Summary',
-      totalEst: 'Total Payable at Check-in:',
-      payAtHotelNotice: 'Pay upon arrival at reception (Cash, Bank Transfer, Visa/Mastercard).',
-      btnSubmit: 'Confirm Direct Booking',
-      btnCallDirect: 'Call Reception to Reserve',
-      voucherSuccessTitle: 'RESERVATION CONFIRMED!',
-      voucherSubtitle: 'Our front desk has received your request and is preparing your room.',
-      voucherCode: 'Booking Voucher Code:',
-      voucherNotice: 'Please note down your booking code or click below to message reception on WhatsApp/Zalo.',
-      sendZalo: 'Message Reception via Zalo',
-      sendWhatsApp: 'Message via WhatsApp',
-      copyCode: 'Copy Booking Code',
-      copied: 'Copied!',
-      close: 'Close',
+      badge: '24/7 Direct Booking Hotline',
+      title: 'Direct Call Booking & 24/7 Hotline',
+      subtitle: 'Please call our front desk directly or chat via Zalo, WhatsApp, or WeChat below for the best direct rates and immediate room confirmation.',
+      viewingRoom: 'Selected Room:',
+      branch1Badge: 'Property 1',
+      branch2Badge: 'Properties 2 & 3',
+      branchIndochineTitle: '1. Indochine Casa Hotel',
+      branchIndochineAddress: '04 Thai Ly, Thao Dien, Thu Duc City, HCMC',
+      branchIndochinePhone: '+84 708 570 838',
+      branchIndochineDesc: 'Indochine heritage elegance • Freestanding soaking tubs • Private quiet balconies',
+      branchChinchuTitle: '2. Chinchu Luxury & Chinchu Stay',
+      branchChinchuAddress: '46 Nguyen Cu & 24 Xuan Thuy, Thao Dien, Thu Duc City, HCMC',
+      branchChinchuPhone: '+84 966 572 935',
+      branchChinchuDesc: 'Modern comfort right at the heart of Xuan Thuy culinary & nightlife strip',
+      callNowBtn: 'Call Hotline',
+      chatZaloBtn: 'Zalo',
+      chatWhatsAppBtn: 'WhatsApp',
+      chatWeChatBtn: 'WeChat',
+      perksTitle: 'Direct Booking Privileges & Guarantees:',
+      perk1: '24/7 Dedicated Concierge & Instant Confirmation',
+      perk2: 'Priority room allocation with premium bathtub or view',
+      perk3: 'Zero credit card prepayment required upon booking',
+      perk4: 'Flexible complimentary early check-in subject to availability',
+      receptionNotice: '24/7 Front desk available 365 days a year',
+      closeBtn: 'Close',
     },
-  }[language];
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!guestName || !guestPhone) {
-      alert(language === 'vi' ? 'Vui lòng nhập Họ tên và Số điện thoại/Zalo để nhận xác nhận!' : 'Please enter your Name and Phone number to receive confirmation!');
-      return;
-    }
-
-    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
-    const code = `#THAODIEN-${randomSuffix}`;
-
-    const newVoucher: ConfirmedBookingVoucher = {
-      bookingCode: code,
-      hotel: selectedHotel,
-      room: selectedRoom,
-      details: {
-        hotelId,
-        roomTypeId,
-        bookingType,
-        checkInDate,
-        checkInTime,
-        checkOutDate,
-        hoursCount,
-        adults,
-        children,
-        guestName,
-        guestPhone,
-        guestEmail,
-        specialRequests,
-        promoCode,
-      },
-      estimatedTotal: total,
-      discountAmount: 0,
-      createdAt: new Date().toLocaleString('vi-VN'),
-    };
-
-    setVoucher(newVoucher);
+    ko: {
+      badge: '24시간 직영 예약 핫라인',
+      title: '24시간 핫라인 전화 및 메신저 간편 예약',
+      subtitle: '아래 각 지점별 직영 핫라인, Zalo, WhatsApp 또는 WeChat으로 문의하시면 최저가 혜택 및 실시간 객실 확인을 바로 도와드립니다.',
+      viewingRoom: '현재 확인 중인 객실:',
+      branch1Badge: '지점 1',
+      branch2Badge: '지점 2 & 3',
+      branchIndochineTitle: '1. 인도차이나 카사 호텔 (Indochine Casa)',
+      branchIndochineAddress: '04 Thai Ly, Thao Dien, Thu Duc City, HCMC',
+      branchIndochinePhone: '+84 708 570 838',
+      branchIndochineDesc: '클래식 인도차이나 헤리티지 • 힐링 전신 욕조 • 햇살 가득한 발코니',
+      branchChinchuTitle: '2. 친추 럭셔리 & 친추 스테이 (Chinchu)',
+      branchChinchuAddress: '46 Nguyen Cu & 24 Xuan Thuy, Thao Dien, Thu Duc City, HCMC',
+      branchChinchuPhone: '+84 966 572 935',
+      branchChinchuDesc: '타오디엔 쑤언투이 보행자 미식 거리 중심의 세련되고 편리한 모던 숙소',
+      callNowBtn: '전화 걸기',
+      chatZaloBtn: 'Zalo',
+      chatWhatsAppBtn: 'WhatsApp',
+      chatWeChatBtn: '위챗 (WeChat)',
+      perksTitle: '직접 전화 예약 시 단독 특전:',
+      perk1: '24시간 프런트 상주 즉각 안내 및 실시간 예약 확정',
+      perk2: '고층 뷰, 타오디엔 전망 또는 욕조 객실 우선 배정',
+      perk3: '해외 신용카드 선결제 불필요, 현장 도착 시 편하게 결제',
+      perk4: '객실 상황에 따른 무료 얼리 체크인 우선 지원',
+      receptionNotice: '연중무휴 24시간 프런트 데스크 친절 운영',
+      closeBtn: '닫기',
+    },
+    zh: {
+      badge: '24小时官方直订热线',
+      title: '致电前台或在线直订 (24/7)',
+      subtitle: '请拨打对应分店前台热线，或通过微信 WeChat、WhatsApp、Zalo 咨询，获取全网直订底价并即时锁定心仪房型。',
+      viewingRoom: '您当前浏览的房型：',
+      branch1Badge: '分店 1',
+      branch2Badge: '分店 2 & 3',
+      branchIndochineTitle: '1. Indochine Casa 印支风情精品酒店',
+      branchIndochineAddress: '胡志明市守德市草田坊蔡莉街04号 (04 Thai Ly, Thao Dien)',
+      branchIndochinePhone: '+84 708 570 838',
+      branchIndochineDesc: '典雅法式印支风格 • 舒缓身心大浴缸 • 采光通透独立阳台',
+      branchChinchuTitle: '2. Chinchu Luxury & Chinchu Stay',
+      branchChinchuAddress: '胡志明市守德市草田坊阮巨街46号与春水街24号',
+      branchChinchuPhone: '+84 966 572 935',
+      branchChinchuDesc: '坐落于草田春水美食街核心商圈，现代商务与活力夜生活近在咫尺',
+      callNowBtn: '致电前台',
+      chatZaloBtn: 'Zalo',
+      chatWhatsAppBtn: 'WhatsApp',
+      chatWeChatBtn: '微信 (WeChat)',
+      perksTitle: '官方直订专属尊享礼遇：',
+      perk1: '24小时前台专属管家在线，即时确认保留房态',
+      perk2: '优先挑选高楼层开阔景观房或特色泡澡浴缸客房',
+      perk3: '无需信用卡线上扣费，到店办理入住现场付款',
+      perk4: '视实际房态尊享免费提前入住礼遇',
+      receptionNotice: '全天候 24 小时前台接待，全年无休',
+      closeBtn: '关闭',
+    },
   };
 
-  const handleCopyCode = () => {
-    if (!voucher) return;
-    navigator.clipboard.writeText(voucher.bookingCode);
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
-  };
-
-  // Compose prefilled message for Zalo or WhatsApp
-  const generateMessage = () => {
-    if (!voucher) return '';
-    const roomName = voucher.room.name[language];
-    const hotelName = voucher.hotel.name;
-    const stayInfo =
-      voucher.details.bookingType === 'daily'
-        ? `${voucher.details.checkInDate} đến ${voucher.details.checkOutDate} (${nights} đêm)`
-        : `Theo giờ (${voucher.details.hoursCount}h) ngày ${voucher.details.checkInDate} lúc ${voucher.details.checkInTime}`;
-
-    return `[ĐẶT PHÒNG TRỰC TIẾP]
-Mã: ${voucher.bookingCode}
-Khách: ${voucher.details.guestName} (${voucher.details.guestPhone})
-Khách sạn: ${hotelName} (${voucher.hotel.address})
-Hạng phòng: ${roomName}
-Thời gian: ${stayInfo}
-Tổng tiền dự kiến: ${voucher.estimatedTotal.toLocaleString('vi-VN')}đ
-Yêu cầu: ${voucher.details.specialRequests || 'Không'}`;
-  };
+  const t = translations[language] || translations.vi;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-950/80 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-stone-200 overflow-hidden text-stone-900 my-8 max-h-[92vh] flex flex-col">
-        {/* Modal Header */}
-        <div className="bg-gradient-to-r from-stone-900 via-amber-950 to-stone-900 text-white p-5 sm:p-6 relative shrink-0">
+    <div
+      className="fixed inset-0 z-50 overflow-y-auto bg-stone-950/75 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200"
+      onClick={onClose}
+    >
+      <div
+        className="relative bg-white rounded-3xl max-w-2xl w-full shadow-2xl overflow-hidden border border-stone-200 my-8 animate-in zoom-in-95 duration-200"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="bg-gradient-to-r from-stone-900 via-stone-850 to-stone-900 text-white p-6 sm:p-8 relative">
           <button
             onClick={onClose}
-            className="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
-            aria-label="Close modal"
+            className="absolute top-5 right-5 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+            aria-label="Đóng"
           >
             <X className="w-5 h-5" />
           </button>
-          <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">
-            <Sparkles className="w-4 h-4" />
-            <span>{t.modalTitle}</span>
+
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-semibold mb-3">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <span>{t.badge}</span>
           </div>
-          <p className="text-xs sm:text-sm text-stone-300">
-            {t.modalSubtitle}
+
+          <h2 className="font-serif-luxury text-2xl sm:text-3xl font-bold tracking-tight mb-2">
+            {t.title}
+          </h2>
+          <p className="text-stone-300 text-xs sm:text-sm leading-relaxed max-w-xl">
+            {t.subtitle}
           </p>
+
+          {/* Viewing Room Preview if triggered from room card */}
+          {preselectedRoom && (
+            <div className="mt-4 p-3 rounded-xl bg-white/10 border border-white/15 flex items-center justify-between gap-3 text-xs">
+              <div>
+                <span className="text-amber-300 font-semibold block">{t.viewingRoom}</span>
+                <span className="font-bold text-white text-sm">
+                  {getLocalizedText(preselectedRoom.name, language)}
+                </span>
+                <span className="text-stone-300 ml-2 font-serif-luxury font-bold">
+                  {preselectedRoom.price.daily.toLocaleString('vi-VN')}đ/đêm
+                </span>
+              </div>
+              <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 border border-stone-700">
+                <img
+                  src={preselectedRoom.featuredImage}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Modal Content */}
-        <div className="p-5 sm:p-6 overflow-y-auto flex-1">
-          {voucher ? (
-            /* Confirmation Voucher Screen */
-            <div className="text-center py-4 space-y-6">
-              <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mx-auto flex items-center justify-center shadow-inner">
-                <CheckCircle2 className="w-10 h-10" />
-              </div>
-
+        {/* Content: 2 Branches Direct Calling Cards */}
+        <div className="p-5 sm:p-7 space-y-4 max-h-[70vh] overflow-y-auto">
+          {/* 1. Indochine Casa */}
+          <div
+            className={`p-4 sm:p-5 rounded-2xl border transition-all ${
+              initialHotelId === 'indochine-casa'
+                ? 'bg-amber-50/50 border-amber-300 ring-2 ring-amber-500/20 shadow-sm'
+                : 'bg-stone-50 border-stone-200'
+            }`}
+          >
+            <div className="flex items-start justify-between gap-3 mb-2">
               <div>
-                <h3 className="font-serif-luxury text-2xl font-bold text-stone-900 mb-1">
-                  {t.voucherSuccessTitle}
-                </h3>
-                <p className="text-xs sm:text-sm text-stone-600 max-w-md mx-auto">
-                  {t.voucherSubtitle}
+                <div className="flex items-center gap-2">
+                  <span className="text-xs px-2 py-0.5 rounded-md bg-amber-800 text-white font-bold">
+                    {t.branch1Badge}
+                  </span>
+                  <h3 className="font-serif-luxury font-bold text-stone-900 text-base sm:text-lg">
+                    {t.branchIndochineTitle}
+                  </h3>
+                </div>
+                <p className="text-xs text-stone-500 flex items-center gap-1.5 mt-1">
+                  <MapPin className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+                  <span>{t.branchIndochineAddress}</span>
                 </p>
               </div>
+              <img
+                src="/logo-indochine.png"
+                alt="Indochine Casa Logo"
+                className="h-8 w-auto max-w-[70px] object-contain shrink-0 hidden sm:block"
+              />
+            </div>
 
-              {/* Voucher Ticket Card */}
-              <div className="bg-stone-50 border-2 border-dashed border-amber-800/30 rounded-2xl p-5 text-left space-y-4 relative">
-                <div className="flex items-center justify-between pb-3 border-b border-stone-200">
-                  <div className="flex items-center gap-3">
-                    <div className="p-1.5 bg-white rounded-xl border border-stone-200 shadow-xs">
-                      <img
-                        src={voucher.hotel.logoUrl}
-                        alt={voucher.hotel.name}
-                        className="h-8 w-auto max-w-[70px] object-contain"
-                      />
-                    </div>
-                    <div>
-                      <span className="text-[11px] text-stone-500 uppercase tracking-wider block">
-                        {t.voucherCode}
-                      </span>
-                      <span className="font-mono text-xl font-bold text-amber-900">
-                        {voucher.bookingCode}
-                      </span>
-                    </div>
-                  </div>
-                  <button
-                    onClick={handleCopyCode}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white border border-stone-300 hover:bg-stone-100 text-xs font-semibold text-stone-700 transition-colors cursor-pointer"
-                  >
-                    <Copy className="w-3.5 h-3.5" />
-                    <span>{copiedCode ? t.copied : t.copyCode}</span>
-                  </button>
-                </div>
+            <p className="text-xs text-stone-600 mb-3.5 font-light leading-relaxed">
+              {t.branchIndochineDesc}
+            </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                  <div>
-                    <span className="text-stone-500 block">Khách sạn:</span>
-                    <span className="font-bold text-stone-900">{voucher.hotel.name}</span>
-                    <span className="text-stone-500 block text-[11px]">{voucher.hotel.fullAddress}</span>
-                  </div>
-                  <div>
-                    <span className="text-stone-500 block">Hạng phòng:</span>
-                    <span className="font-bold text-stone-900">{voucher.room.name[language]}</span>
-                  </div>
-                  <div>
-                    <span className="text-stone-500 block">Khách hàng:</span>
-                    <span className="font-bold text-stone-900">
-                      {voucher.details.guestName} ({voucher.details.guestPhone})
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-stone-500 block">Thời gian:</span>
-                    <span className="font-bold text-stone-900">
-                      {voucher.details.bookingType === 'daily'
-                        ? `${voucher.details.checkInDate} ➔ ${voucher.details.checkOutDate}`
-                        : `${voucher.details.checkInDate} (${voucher.details.hoursCount}h từ ${voucher.details.checkInTime})`}
-                    </span>
-                  </div>
-                </div>
+            {/* 4 contact channels: Phone, Zalo, WhatsApp, WeChat */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <a
+                href="tel:+84708570838"
+                className="py-2.5 px-2 rounded-xl bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold flex flex-col items-center justify-center gap-1 transition-all shadow-xs cursor-pointer text-center"
+              >
+                <Phone className="w-4 h-4 text-amber-400 shrink-0" />
+                <span className="truncate">{t.callNowBtn}</span>
+              </a>
 
-                <div className="pt-3 border-t border-stone-200 flex items-center justify-between">
-                  <span className="text-xs text-stone-600 font-medium">Tổng thanh toán tại quầy:</span>
-                  <span className="font-serif-luxury text-xl font-bold text-amber-900">
-                    {voucher.estimatedTotal.toLocaleString('vi-VN')}đ
-                  </span>
-                </div>
-              </div>
+              <a
+                href="https://zalo.me/0708570838"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="py-2.5 px-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex flex-col items-center justify-center gap-1 transition-all shadow-xs cursor-pointer text-center"
+              >
+                <ZaloIcon className="w-4 h-4 shrink-0" />
+                <span className="truncate">{t.chatZaloBtn}</span>
+              </a>
 
-              <p className="text-xs text-stone-500 italic">
-                {t.voucherNotice}
-              </p>
-
-              {/* Direct message buttons */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                <a
-                  href={`https://zalo.me/${selectedHotel.zaloPhone}?text=${encodeURIComponent(
-                    generateMessage()
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  <span>{t.sendZalo}</span>
-                </a>
-
-                <a
-                  href={`https://wa.me/${selectedHotel.whatsappPhone.replace('+', '')}?text=${encodeURIComponent(
-                    generateMessage()
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  <span>{t.sendWhatsApp}</span>
-                </a>
-              </div>
+              <a
+                href="https://wa.me/84708570838"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="py-2.5 px-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-bold flex flex-col items-center justify-center gap-1 transition-all shadow-xs cursor-pointer text-center"
+              >
+                <WhatsAppIcon className="w-4 h-4 shrink-0" />
+                <span className="truncate">{t.chatWhatsAppBtn}</span>
+              </a>
 
               <button
-                onClick={onClose}
-                className="w-full py-2.5 rounded-xl border border-stone-300 text-stone-700 font-semibold text-xs hover:bg-stone-50 transition-colors"
+                type="button"
+                onClick={() => {
+                  onClose();
+                  if (onOpenWeChat) onOpenWeChat('indochine');
+                }}
+                className="py-2.5 px-2 rounded-xl bg-[#07C160] hover:bg-[#059648] text-white text-xs font-bold flex flex-col items-center justify-center gap-1 transition-all shadow-xs cursor-pointer text-center"
               >
-                {t.close}
+                <WeChatIcon className="w-4 h-4 shrink-0" />
+                <span className="truncate">{t.chatWeChatBtn}</span>
               </button>
             </div>
-          ) : (
-            /* Booking Form */
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Rental Mode Tabs */}
-              <div className="flex items-center gap-2 bg-stone-100 p-1 rounded-xl text-xs font-semibold">
-                <button
-                  type="button"
-                  onClick={() => setBookingType('daily')}
-                  className={`flex-1 py-2 rounded-lg text-center transition-all cursor-pointer ${
-                    bookingType === 'daily'
-                      ? 'bg-white text-stone-900 shadow-xs font-bold'
-                      : 'text-stone-600 hover:text-stone-900'
-                  }`}
-                >
-                  🌙 {t.tabDaily}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setBookingType('hourly')}
-                  className={`flex-1 py-2 rounded-lg text-center transition-all cursor-pointer ${
-                    bookingType === 'hourly'
-                      ? 'bg-amber-700 text-white shadow-xs font-bold'
-                      : 'text-stone-600 hover:text-stone-900'
-                  }`}
-                >
-                  ⏱️ {t.tabHourly}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setBookingType('monthly')}
-                  className={`flex-1 py-2 rounded-lg text-center transition-all cursor-pointer ${
-                    bookingType === 'monthly'
-                      ? 'bg-white text-stone-900 shadow-xs font-bold'
-                      : 'text-stone-600 hover:text-stone-900'
-                  }`}
-                >
-                  🏢 {t.tabMonthly}
-                </button>
+          </div>
+
+          {/* 2. Chinchu Luxury & Chinchu Stay */}
+          <div
+            className={`p-4 sm:p-5 rounded-2xl border transition-all ${
+              initialHotelId !== 'indochine-casa'
+                ? 'bg-amber-50/50 border-amber-300 ring-2 ring-amber-500/20 shadow-sm'
+                : 'bg-stone-50 border-stone-200'
+            }`}
+          >
+            <div className="flex items-start justify-between gap-3 mb-2">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs px-2 py-0.5 rounded-md bg-stone-800 text-white font-bold">
+                    {t.branch2Badge}
+                  </span>
+                  <h3 className="font-serif-luxury font-bold text-stone-900 text-base sm:text-lg">
+                    {t.branchChinchuTitle}
+                  </h3>
+                </div>
+                <p className="text-xs text-stone-500 flex items-center gap-1.5 mt-1">
+                  <MapPin className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+                  <span>{t.branchChinchuAddress}</span>
+                </p>
               </div>
+              <img
+                src="/logo-chinchu.png"
+                alt="Chinchu Logo"
+                className="h-8 w-auto max-w-[50px] object-contain shrink-0 hidden sm:block"
+              />
+            </div>
 
-              {/* Hotel & Room Selector */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider">
-                      {t.labelHotel}
-                    </label>
-                    <div className="px-2 py-0.5 rounded-md bg-stone-100 border border-stone-200">
-                      <img
-                        src={selectedHotel.logoUrl}
-                        alt={selectedHotel.name}
-                        className="h-4 sm:h-5 w-auto max-w-[60px] object-contain"
-                      />
-                    </div>
-                  </div>
-                  <select
-                    value={hotelId}
-                    onChange={(e) => setHotelId(e.target.value)}
-                    className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium focus:ring-2 focus:ring-amber-700 focus:outline-hidden"
-                  >
-                    {hotels.map((h) => (
-                      <option key={h.id} value={h.id}>
-                        {h.name} - {h.address}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+            <p className="text-xs text-stone-600 mb-3.5 font-light leading-relaxed">
+              {t.branchChinchuDesc}
+            </p>
 
-                <div>
-                  <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
-                    {t.labelRoom}
-                  </label>
-                  <select
-                    value={roomTypeId}
-                    onChange={(e) => setRoomTypeId(e.target.value)}
-                    className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium focus:ring-2 focus:ring-amber-700 focus:outline-hidden"
-                  >
-                    {availableRooms.map((r) => (
-                      <option key={r.id} value={r.id}>
-                        {r.name[language]} ({r.sizeM2}m²)
-                      </option>
-                    ))}
-                  </select>
-                </div>
+            {/* 4 contact channels: Phone, Zalo, WhatsApp, WeChat */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <a
+                href="tel:+84966572935"
+                className="py-2.5 px-2 rounded-xl bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold flex flex-col items-center justify-center gap-1 transition-all shadow-xs cursor-pointer text-center"
+              >
+                <Phone className="w-4 h-4 text-amber-400 shrink-0" />
+                <span className="truncate">{t.callNowBtn}</span>
+              </a>
+
+              <a
+                href="https://zalo.me/0966572935"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="py-2.5 px-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex flex-col items-center justify-center gap-1 transition-all shadow-xs cursor-pointer text-center"
+              >
+                <ZaloIcon className="w-4 h-4 shrink-0" />
+                <span className="truncate">{t.chatZaloBtn}</span>
+              </a>
+
+              <a
+                href="https://wa.me/84966572935"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="py-2.5 px-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-bold flex flex-col items-center justify-center gap-1 transition-all shadow-xs cursor-pointer text-center"
+              >
+                <WhatsAppIcon className="w-4 h-4 shrink-0" />
+                <span className="truncate">{t.chatWhatsAppBtn}</span>
+              </a>
+
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  if (onOpenWeChat) onOpenWeChat('chinchu');
+                }}
+                className="py-2.5 px-2 rounded-xl bg-[#07C160] hover:bg-[#059648] text-white text-xs font-bold flex flex-col items-center justify-center gap-1 transition-all shadow-xs cursor-pointer text-center"
+              >
+                <WeChatIcon className="w-4 h-4 shrink-0" />
+                <span className="truncate">{t.chatWeChatBtn}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Direct Booking Perks Note */}
+          <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200/80">
+            <h4 className="text-xs font-bold text-emerald-950 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-700" />
+              <span>{t.perksTitle}</span>
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-stone-700">
+              <div className="flex items-start gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                <span>{t.perk1}</span>
               </div>
-
-              {/* Dates & Times */}
-              {bookingType === 'daily' ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
-                      {t.labelCheckIn} (14:00)
-                    </label>
-                    <input
-                      type="date"
-                      value={checkInDate}
-                      min={new Date().toISOString().split('T')[0]}
-                      onChange={(e) => setCheckInDate(e.target.value)}
-                      className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium focus:ring-2 focus:ring-amber-700 focus:outline-hidden"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
-                      {t.labelCheckOut} (12:00)
-                    </label>
-                    <input
-                      type="date"
-                      value={checkOutDate}
-                      min={checkInDate}
-                      onChange={(e) => setCheckOutDate(e.target.value)}
-                      className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium focus:ring-2 focus:ring-amber-700 focus:outline-hidden"
-                      required
-                    />
-                  </div>
-                </div>
-              ) : bookingType === 'hourly' ? (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div>
-                    <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
-                      {t.labelCheckIn}
-                    </label>
-                    <input
-                      type="date"
-                      value={checkInDate}
-                      min={new Date().toISOString().split('T')[0]}
-                      onChange={(e) => setCheckInDate(e.target.value)}
-                      className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-amber-700 focus:outline-hidden"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
-                      {t.labelCheckInTime}
-                    </label>
-                    <input
-                      type="time"
-                      value={checkInTime}
-                      onChange={(e) => setCheckInTime(e.target.value)}
-                      className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-amber-700 focus:outline-hidden"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
-                      {t.labelHoursCount}
-                    </label>
-                    <select
-                      value={hoursCount}
-                      onChange={(e) => setHoursCount(Number(e.target.value))}
-                      className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-amber-700 focus:outline-hidden"
-                    >
-                      <option value={2}>2 Giờ (Tiêu chuẩn)</option>
-                      <option value={3}>3 Giờ</option>
-                      <option value={4}>4 Giờ</option>
-                      <option value={5}>5 Giờ</option>
-                    </select>
-                  </div>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
-                      Ngày bắt đầu hợp đồng
-                    </label>
-                    <input
-                      type="date"
-                      value={checkInDate}
-                      min={new Date().toISOString().split('T')[0]}
-                      onChange={(e) => setCheckInDate(e.target.value)}
-                      className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium focus:ring-2 focus:ring-amber-700 focus:outline-hidden"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
-                      Thời hạn dự kiến
-                    </label>
-                    <select className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium focus:ring-2 focus:ring-amber-700 focus:outline-hidden">
-                      <option>1 Tháng</option>
-                      <option>3 Tháng (Giảm thêm 5%)</option>
-                      <option>6 Tháng - 1 Năm (Giảm thêm 10%)</option>
-                    </select>
-                  </div>
-                </div>
-              )}
-
-              {/* Guest Information */}
-              <div className="pt-2 border-t border-stone-200">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
-                      {t.labelName} *
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Ví dụ: Nguyễn Văn A"
-                      value={guestName}
-                      onChange={(e) => setGuestName(e.target.value)}
-                      className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs sm:text-sm focus:ring-2 focus:ring-amber-700 focus:outline-hidden"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
-                      {t.labelPhone} *
-                    </label>
-                    <input
-                      type="tel"
-                      placeholder="0909 xxx xxx"
-                      value={guestPhone}
-                      onChange={(e) => setGuestPhone(e.target.value)}
-                      className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs sm:text-sm focus:ring-2 focus:ring-amber-700 focus:outline-hidden"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-3">
-                  <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">
-                    {t.labelRequests}
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Ví dụ: Cần bồn tắm ngâm mình, check-in sớm 12h, hóa đơn công ty..."
-                    value={specialRequests}
-                    onChange={(e) => setSpecialRequests(e.target.value)}
-                    className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-amber-700 focus:outline-hidden"
-                  />
-                </div>
+              <div className="flex items-start gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                <span>{t.perk2}</span>
               </div>
-
-              {/* Price Calculation - Bold Overnight Price */}
-              <div className="bg-amber-50/60 border border-amber-200/80 rounded-2xl p-4 space-y-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="text-xs font-bold text-stone-700 uppercase tracking-wider block">
-                      {bookingType === 'daily' ? t.pricePerNightFrom : 'Chi phí dự kiến:'}
-                    </span>
-                    <span className="text-[11px] text-emerald-700 font-semibold">
-                      {bookingType === 'daily' ? `${nights} đêm nghỉ dưỡng` : 'Đặt trực tiếp giá tốt nhất'}
-                    </span>
-                  </div>
-                  <div className="text-right">
-                    <span className="font-serif-luxury font-black text-2xl sm:text-3xl text-amber-950 tracking-tight">
-                      {total.toLocaleString('vi-VN')}đ
-                    </span>
-                  </div>
-                </div>
-
-                <div className="text-[11px] text-stone-500 italic text-right pt-2 border-t border-amber-200/60">
-                  {t.payAtHotelNotice}
-                </div>
+              <div className="flex items-start gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                <span>{t.perk3}</span>
               </div>
-
-              {/* Submit & Contact Buttons */}
-              <div className="space-y-3 pt-2">
-                <button
-                  type="submit"
-                  className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-800 to-amber-950 hover:from-amber-900 hover:to-stone-900 text-white font-bold text-sm shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <span>{t.btnSubmit}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <a
-                    href={branchPhoneHref}
-                    className="py-2.5 px-3 rounded-xl bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
-                  >
-                    <Phone className="w-3.5 h-3.5 text-amber-400" />
-                    <span>{branchPhoneDisplay}</span>
-                  </a>
-                  <a
-                    href={branchZaloHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
-                  >
-                    <MessageCircle className="w-3.5 h-3.5" />
-                    <span>Chat Zalo</span>
-                  </a>
-                </div>
+              <div className="flex items-start gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                <span>{t.perk4}</span>
               </div>
-            </form>
-          )}
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="p-4 sm:p-5 bg-stone-100 border-t border-stone-200 flex items-center justify-between text-xs text-stone-500">
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-stone-400" />
+            <span>{t.receptionNotice}</span>
+          </div>
+          <button
+            onClick={onClose}
+            className="px-5 py-2 rounded-xl bg-stone-200 hover:bg-stone-300 text-stone-800 font-semibold transition-colors cursor-pointer"
+          >
+            {t.closeBtn}
+          </button>
         </div>
       </div>
     </div>

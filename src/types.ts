@@ -1,4 +1,18 @@
-export type Language = 'vi' | 'en';
+export type Language = 'vi' | 'en' | 'ko' | 'zh';
+
+export type LocalizedString = {
+  vi: string;
+  en: string;
+  ko?: string;
+  zh?: string;
+};
+
+export type LocalizedList = {
+  vi: string[];
+  en: string[];
+  ko?: string[];
+  zh?: string[];
+};
 
 export type BookingType = 'daily' | 'hourly' | 'monthly';
 
@@ -7,18 +21,9 @@ export interface HotelProperty {
   name: string;
   brand: 'INDOCHINE CASA' | 'CHINCHU';
   logoUrl: string;
-  tagline: {
-    vi: string;
-    en: string;
-  };
-  subtitle: {
-    vi: string;
-    en: string;
-  };
-  description: {
-    vi: string;
-    en: string;
-  };
+  tagline: LocalizedString;
+  subtitle: LocalizedString;
+  description: LocalizedString;
   starRating: number;
   googleRating: number;
   reviewCount: number;
@@ -35,13 +40,12 @@ export interface HotelProperty {
   zaloUrl: string;
   whatsappPhone: string;
   whatsappUrl: string;
+  wechatId?: string;
+  wechatDisplay?: string;
   email: string;
   heroImage: string;
   gallery: string[];
-  features: {
-    vi: string[];
-    en: string[];
-  };
+  features: LocalizedList;
   priceRange: {
     hourlyFrom: number;
     dailyFrom: number;
@@ -52,10 +56,7 @@ export interface HotelProperty {
     district1Minutes: number;
     airportMinutes: number;
     vincomMegaMallMinutes: number;
-    highlightWalk: {
-      vi: string;
-      en: string;
-    };
+    highlightWalk: LocalizedString;
   };
   checkInTime: string;
   checkOutTime: string;
@@ -63,34 +64,19 @@ export interface HotelProperty {
 
 export interface RoomAmenity {
   icon: string;
-  name: {
-    vi: string;
-    en: string;
-  };
+  name: LocalizedString;
 }
 
 export interface RoomType {
   id: string;
   hotelId: string;
-  name: {
-    vi: string;
-    en: string;
-  };
-  category: {
-    vi: string;
-    en: string;
-  };
+  name: LocalizedString;
+  category: LocalizedString;
   sizeM2: number;
-  bedType: {
-    vi: string;
-    en: string;
-  };
+  bedType: LocalizedString;
   maxAdults: number;
   maxChildren: number;
-  view: {
-    vi: string;
-    en: string;
-  };
+  view: LocalizedString;
   hasBathtub: boolean;
   hasBalcony: boolean;
   hasWindow: boolean;
@@ -101,14 +87,8 @@ export interface RoomType {
   monthlyPrice?: number;
   featuredImage: string;
   gallery: string[];
-  amenities: {
-    vi: string[];
-    en: string[];
-  };
-  description: {
-    vi: string;
-    en: string;
-  };
+  amenities: LocalizedList;
+  description: LocalizedString;
   isBestSeller?: boolean;
   isPopular?: boolean;
 }
@@ -118,39 +98,21 @@ export interface Review {
   hotelId: string;
   hotelName: string;
   guestName: string;
-  guestOrigin: {
-    vi: string;
-    en: string;
-  };
+  guestOrigin: LocalizedString;
   avatar: string;
   rating: number;
-  stayType: {
-    vi: string;
-    en: string;
-  };
+  stayType: LocalizedString;
   date: string;
-  roomName: {
-    vi: string;
-    en: string;
-  };
-  comment: {
-    vi: string;
-    en: string;
-  };
+  roomName: LocalizedString;
+  comment: LocalizedString;
   source: 'Google Maps' | 'Booking.com' | 'Agoda' | 'Direct Guest';
 }
 
 export interface FAQItem {
   id: string;
   category: 'booking' | 'policies' | 'location' | 'services';
-  question: {
-    vi: string;
-    en: string;
-  };
-  answer: {
-    vi: string;
-    en: string;
-  };
+  question: LocalizedString;
+  answer: LocalizedString;
 }
 
 export interface BookingFormState {
