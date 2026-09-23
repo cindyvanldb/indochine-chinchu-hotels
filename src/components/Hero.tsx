@@ -141,14 +141,15 @@ export const Hero: React.FC<HeroProps> = ({
 
   return (
     <section className="relative overflow-hidden bg-[#FAF8F5] text-stone-900 pt-8 pb-16 lg:pt-14 lg:pb-24 border-b border-stone-200/80">
-      {/* Background Hero Image with Soft Luminous Classic Scrim */}
-      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+      {/* Background Hero Image with Translucent Glass Scrim */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
         <img
           src={getAssetUrl(activeHotel.heroImage)}
           alt={activeHotel.name}
-          className="w-full h-full object-cover object-center scale-105 transition-all duration-1000 ease-out filter brightness-105 contrast-95"
+          className="w-full h-full object-cover object-center scale-105 transition-all duration-1000 ease-out brightness-[0.96] contrast-[1.04]"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF8F5]/40 via-[#FAF8F5]/70 to-[#FAF8F5]" />
+        {/* Translucent overlay that lets the hotel photo shine through clearly while preserving contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF8F5]/70 via-[#FAF8F5]/55 to-[#FAF8F5]/95 backdrop-blur-[1.5px]" />
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
