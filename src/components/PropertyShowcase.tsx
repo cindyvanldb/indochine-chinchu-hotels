@@ -110,11 +110,11 @@ export const PropertyShowcase: React.FC<PropertyShowcaseProps> = ({
   const t = translations[language] || translations.vi;
 
   return (
-    <section id="properties" className="py-16 sm:py-24 bg-stone-100 text-stone-900 scroll-mt-20">
+    <section id="properties" className="py-16 sm:py-24 bg-[#FAF7F2] text-stone-900 scroll-mt-20 border-b border-stone-200/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold uppercase tracking-wider mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold uppercase tracking-wider mb-3 border border-amber-300/80 shadow-2xs">
             <Sparkles className="w-3.5 h-3.5 text-amber-700" />
             <span>{t.sectionBadge}</span>
           </div>
@@ -155,7 +155,7 @@ export const PropertyShowcase: React.FC<PropertyShowcaseProps> = ({
 
                   {/* Brand & Stars Badge */}
                   <div className="absolute top-4 left-4 flex flex-wrap items-center gap-2">
-                    <div className="px-2.5 py-1 rounded-xl bg-white/95 backdrop-blur-md shadow-sm border border-stone-200 flex items-center gap-2">
+                    <div className="px-2.5 py-1 rounded-xl bg-white/95 backdrop-blur-md shadow-xs border border-stone-200 flex items-center gap-2">
                       <img
                         src={getAssetUrl(hotel.logoUrl)}
                         alt={`Logo ${hotel.name}`}
@@ -166,10 +166,10 @@ export const PropertyShowcase: React.FC<PropertyShowcaseProps> = ({
                       </span>
                     </div>
 
-                    <div className="px-2 py-1 rounded-xl bg-stone-900/90 backdrop-blur-md border border-stone-700 text-amber-400 flex items-center gap-1 text-xs">
-                      <Star className="w-3.5 h-3.5 fill-current" />
-                      <span className="font-bold text-white">{hotel.googleRating || hotel.starRating || 4.9}</span>
-                      <span className="text-[10px] text-stone-400">({hotel.reviewCount})</span>
+                    <div className="px-2.5 py-1 rounded-xl bg-white/95 backdrop-blur-md border border-stone-200 text-stone-800 flex items-center gap-1 text-xs shadow-xs">
+                      <Star className="w-3.5 h-3.5 fill-current text-amber-500" />
+                      <span className="font-bold text-stone-900">{hotel.googleRating || hotel.starRating || 4.9}</span>
+                      <span className="text-[10px] text-stone-500">({hotel.reviewCount})</span>
                     </div>
                   </div>
 

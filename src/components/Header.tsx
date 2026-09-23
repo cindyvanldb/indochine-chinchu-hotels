@@ -134,21 +134,21 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md shadow-xs border-b border-stone-200">
       {/* 1. Dedicated Top Row for Language Selection in the Corner */}
-      <div className="bg-[#031c17] text-stone-300 text-xs py-1.5 px-4 border-b border-emerald-950/80">
+      <div className="bg-[#FAF7F2] text-stone-700 text-xs py-1.5 px-4 border-b border-stone-200">
         <div className="max-w-7xl mx-auto flex items-center justify-end">
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-medium text-stone-300 flex items-center gap-1.5">
-              <Globe className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span className="font-semibold text-amber-300/90">{t.languageLabel}</span>
+            <span className="text-[11px] font-medium text-stone-700 flex items-center gap-1.5">
+              <Globe className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+              <span className="font-semibold text-amber-900">{t.languageLabel}</span>
             </span>
-            <div className="flex items-center gap-1 bg-stone-900/90 rounded-lg p-0.5 border border-stone-700/80 shadow-xs">
+            <div className="flex items-center gap-1 bg-white/95 rounded-lg p-0.5 border border-stone-300/80 shadow-2xs">
               <button
                 type="button"
                 onClick={() => onLanguageChange('vi')}
                 className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                   language === 'vi'
-                    ? 'bg-amber-600 text-white shadow-sm ring-1 ring-amber-400'
-                    : 'text-stone-300 hover:text-white hover:bg-stone-800'
+                    ? 'bg-amber-700 text-white shadow-xs ring-1 ring-amber-600'
+                    : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
                 }`}
                 aria-label="Tiếng Việt"
               >
@@ -160,8 +160,8 @@ export const Header: React.FC<HeaderProps> = ({
                 onClick={() => onLanguageChange('en')}
                 className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                   language === 'en'
-                    ? 'bg-amber-600 text-white shadow-sm ring-1 ring-amber-400'
-                    : 'text-stone-300 hover:text-white hover:bg-stone-800'
+                    ? 'bg-amber-700 text-white shadow-xs ring-1 ring-amber-600'
+                    : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
                 }`}
                 aria-label="English"
               >
@@ -173,8 +173,8 @@ export const Header: React.FC<HeaderProps> = ({
                 onClick={() => onLanguageChange('ko')}
                 className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                   language === 'ko'
-                    ? 'bg-amber-600 text-white shadow-sm ring-1 ring-amber-400'
-                    : 'text-stone-300 hover:text-white hover:bg-stone-800'
+                    ? 'bg-amber-700 text-white shadow-xs ring-1 ring-amber-600'
+                    : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
                 }`}
                 aria-label="한국어"
               >
@@ -186,8 +186,8 @@ export const Header: React.FC<HeaderProps> = ({
                 onClick={() => onLanguageChange('zh')}
                 className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                   language === 'zh'
-                    ? 'bg-amber-600 text-white shadow-sm ring-1 ring-amber-400'
-                    : 'text-stone-300 hover:text-white hover:bg-stone-800'
+                    ? 'bg-amber-700 text-white shadow-xs ring-1 ring-amber-600'
+                    : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
                 }`}
                 aria-label="中文"
               >
@@ -200,10 +200,10 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* 2. Announcement Banner & Hotlines */}
-      <div className="bg-[#052621] text-stone-200 text-xs py-2 px-4 border-b border-amber-900/40">
+      <div className="bg-[#FFFDF9] text-stone-800 text-xs py-2 px-4 border-b border-amber-200/80 shadow-2xs">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
-          <div className="flex items-center gap-2 font-medium text-center sm:text-left">
-            <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <div className="flex items-center gap-2 font-medium text-center sm:text-left text-stone-800">
+            <span className="inline-block w-2 h-2 rounded-full bg-amber-600 animate-pulse"></span>
             <span>{t.announcement}</span>
           </div>
 
@@ -211,23 +211,23 @@ export const Header: React.FC<HeaderProps> = ({
             {/* 1. Indochine Casa Hotline */}
             <a
               href="tel:+84708570838"
-              className="flex items-center gap-1 text-stone-300 hover:text-amber-400 font-semibold transition-colors"
+              className="flex items-center gap-1 text-stone-700 hover:text-amber-800 font-semibold transition-colors"
               title="Gọi Indochine Casa Hotel (04 Thái Ly): +84 708 570 838"
             >
-              <Phone className="w-3 h-3 text-amber-400 shrink-0" />
-              <span>Indochine Casa: <strong className="text-white hover:text-amber-400">+84 708 570 838</strong></span>
+              <Phone className="w-3 h-3 text-amber-700 shrink-0" />
+              <span>Indochine Casa: <strong className="text-amber-900 hover:text-amber-700">+84 708 570 838</strong></span>
             </a>
 
-            <span className="text-emerald-800 hidden md:inline">|</span>
+            <span className="text-stone-300 hidden md:inline">|</span>
 
             {/* 2. Chinchu Stay Hotline */}
             <a
               href="tel:+84966572935"
-              className="flex items-center gap-1 text-stone-300 hover:text-amber-400 font-semibold transition-colors"
+              className="flex items-center gap-1 text-stone-700 hover:text-amber-800 font-semibold transition-colors"
               title="Gọi Chinchu Stay (46 Nguyễn Cừ & 24 Xuân Thủy): +84 966 572 935"
             >
-              <Phone className="w-3 h-3 text-amber-400 shrink-0" />
-              <span>Chinchu Stay: <strong className="text-white hover:text-amber-400">+84 966 572 935</strong></span>
+              <Phone className="w-3 h-3 text-amber-700 shrink-0" />
+              <span>Chinchu Stay: <strong className="text-amber-900 hover:text-amber-700">+84 966 572 935</strong></span>
             </a>
           </div>
         </div>

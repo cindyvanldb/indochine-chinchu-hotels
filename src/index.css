@@ -11,6 +11,8 @@ html {
 
 body {
   font-family: var(--font-sans);
+  background-color: #FAF8F5;
+  color: #1c1917;
 }
 
 .font-serif-luxury {

@@ -169,21 +169,21 @@ export const WhyBookDirect: React.FC<WhyBookDirectProps> = ({
   const t = translations[language] || translations.vi;
 
   return (
-    <section id="perks" className="py-16 sm:py-24 bg-stone-900 text-white scroll-mt-20 relative overflow-hidden">
-      {/* Subtle background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl pointer-events-none" />
+    <section id="perks" className="py-16 sm:py-24 bg-[#FAF7F2] text-stone-900 scroll-mt-20 relative overflow-hidden border-t border-stone-200/80">
+      {/* Subtle warm amber background glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold uppercase tracking-wider mb-3 border border-amber-500/30">
-            <ShieldCheck className="w-4 h-4 text-amber-400" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold uppercase tracking-wider mb-3 border border-amber-300/80 shadow-2xs">
+            <ShieldCheck className="w-4 h-4 text-amber-700" />
             <span>{t.badge}</span>
           </div>
-          <h2 className="font-serif-luxury text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4">
+          <h2 className="font-serif-luxury text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900 tracking-tight mb-4">
             {t.title}
           </h2>
-          <p className="text-stone-300 text-base sm:text-lg leading-relaxed font-light">
+          <p className="text-stone-600 text-base sm:text-lg leading-relaxed font-normal">
             {t.subtitle}
           </p>
         </div>
@@ -195,16 +195,16 @@ export const WhyBookDirect: React.FC<WhyBookDirectProps> = ({
             return (
               <div
                 key={index}
-                className="bg-stone-800/80 backdrop-blur-md rounded-2xl p-6 border border-stone-700 hover:border-amber-500/50 transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1"
+                className="bg-white rounded-2xl p-6 border border-stone-200/90 hover:border-amber-500/50 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1"
               >
                 <div>
-                  <div className="w-12 h-12 rounded-xl bg-amber-950 border border-amber-600/30 flex items-center justify-center text-amber-400 mb-4 group-hover:scale-110 group-hover:bg-amber-900 transition-all">
+                  <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-800 mb-4 group-hover:scale-110 group-hover:bg-amber-100 transition-all shadow-2xs">
                     <Icon className="w-6 h-6" />
                   </div>
-                  <h3 className="font-bold text-lg text-white mb-2 group-hover:text-amber-300 transition-colors">
+                  <h3 className="font-bold text-lg text-stone-900 mb-2 group-hover:text-amber-800 transition-colors">
                     {perk.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-stone-300 leading-relaxed font-light">
+                  <p className="text-xs sm:text-sm text-stone-600 leading-relaxed font-normal">
                     {perk.description}
                   </p>
                 </div>
@@ -217,9 +217,9 @@ export const WhyBookDirect: React.FC<WhyBookDirectProps> = ({
         <div className="text-center">
           <button
             onClick={onOpenBooking}
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-600 to-amber-800 hover:from-amber-700 hover:to-amber-900 text-white font-bold text-sm sm:text-base shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 cursor-pointer"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-700 to-amber-800 hover:from-amber-800 hover:to-amber-900 text-white font-bold text-sm sm:text-base shadow-lg hover:shadow-xl transition-all transform hover:scale-105 cursor-pointer"
           >
-            <Phone className="w-5 h-5 text-amber-300" />
+            <Phone className="w-5 h-5 text-amber-200" />
             <span>{t.cta}</span>
           </button>
         </div>

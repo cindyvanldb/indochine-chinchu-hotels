@@ -99,21 +99,21 @@ export const Footer: React.FC<FooterProps> = ({
   const t = translations[language] || translations.vi;
 
   return (
-    <footer className="bg-stone-950 text-stone-300 pt-16 pb-28 md:pb-16 border-t border-stone-800">
+    <footer className="bg-[#FAF7F2] text-stone-700 pt-16 pb-28 md:pb-16 border-t border-stone-200/90">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Footer Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-stone-800">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-stone-200/90">
           {/* Column 1: Brand overview (4 cols) */}
           <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 bg-white rounded-2xl p-2 border border-stone-700 shadow-md shrink-0">
+              <div className="flex items-center gap-2 bg-white rounded-2xl p-2 border border-stone-200 shadow-xs shrink-0">
                 <img
                   src={getAssetUrl('/assets/logo-indochine.png')}
                   alt="Logo Indochine Casa Hotel"
                   className="h-8 sm:h-9 w-auto max-w-[85px] object-contain"
                   title="Indochine Casa Hotel"
                 />
-                <div className="w-px h-6 bg-stone-300" />
+                <div className="w-px h-6 bg-stone-200" />
                 <img
                   src={getAssetUrl('/assets/logo-chinchu.png')}
                   alt="Logo Chinchu"
@@ -122,23 +122,23 @@ export const Footer: React.FC<FooterProps> = ({
                 />
               </div>
               <div>
-                <div className="font-serif-luxury font-bold text-white text-lg tracking-tight">
-                  INDOCHINE CASA <span className="text-amber-500">&</span> CHINCHU
+                <div className="font-serif-luxury font-bold text-stone-900 text-lg tracking-tight">
+                  INDOCHINE CASA <span className="text-amber-700">&</span> CHINCHU
                 </div>
-                <div className="text-[11px] font-medium tracking-wider text-stone-400 uppercase">
+                <div className="text-[11px] font-medium tracking-wider text-stone-500 uppercase">
                   Boutique Hotels & Serviced Stays Thảo Điền
                 </div>
               </div>
             </div>
 
-            <p className="text-xs sm:text-sm text-stone-400 leading-relaxed font-light">
+            <p className="text-xs sm:text-sm text-stone-600 leading-relaxed font-normal">
               {t.aboutDesc}
             </p>
 
             <div className="pt-2">
               <button
                 onClick={() => onOpenBooking()}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-700 to-amber-900 hover:from-amber-800 hover:to-stone-900 text-white font-bold text-xs shadow-md transition-all cursor-pointer"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-700 to-amber-800 hover:from-amber-800 hover:to-amber-900 text-white font-bold text-xs shadow-md transition-all cursor-pointer"
               >
                 {t.bookDirectBtn}
               </button>
@@ -147,32 +147,32 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Column 2: 3 Properties addresses & Maps (4 cols) */}
           <div className="lg:col-span-4 space-y-4">
-            <h4 className="font-bold text-white text-sm uppercase tracking-wider">
+            <h4 className="font-bold text-stone-900 text-sm uppercase tracking-wider">
               {t.branchTitle}
             </h4>
 
             <div className="space-y-3 text-xs">
               {hotels.map((h) => (
-                <div key={h.id} className="p-3 rounded-xl bg-stone-900 border border-stone-800">
+                <div key={h.id} className="p-3 rounded-xl bg-white border border-stone-200/90 shadow-2xs">
                   <div className="flex items-start justify-between gap-2">
-                    <span className="font-bold text-amber-400">{h.name}</span>
+                    <span className="font-bold text-amber-900">{h.name}</span>
                     <a
                       href={h.googleMapsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-stone-400 hover:text-white flex items-center gap-1 text-[11px] shrink-0"
+                      className="text-stone-600 hover:text-amber-800 flex items-center gap-1 text-[11px] shrink-0"
                     >
                       <span>Google Maps</span>
-                      <Navigation className="w-3 h-3 text-amber-500" />
+                      <Navigation className="w-3 h-3 text-amber-700" />
                     </a>
                   </div>
-                  <p className="text-stone-300 mt-1 flex items-start gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
+                  <p className="text-stone-600 mt-1 flex items-start gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-amber-700 shrink-0 mt-0.5" />
                     <span>{h.fullAddress}</span>
                   </p>
-                  <p className="text-stone-400 mt-1 flex items-center gap-1.5 text-[11px]">
-                    <Phone className="w-3 h-3 text-stone-500" />
-                    <span>Hotline: {h.phone}</span>
+                  <p className="text-stone-500 mt-1 flex items-center gap-1.5 text-[11px]">
+                    <Phone className="w-3.5 h-3.5 text-stone-400" />
+                    <span>Hotline: <strong className="text-stone-700">{h.phone}</strong></span>
                   </p>
                 </div>
               ))}
@@ -181,30 +181,30 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Column 3: Contact & Payment Info (4 cols) */}
           <div className="lg:col-span-4 space-y-4">
-            <h4 className="font-bold text-white text-sm uppercase tracking-wider">
+            <h4 className="font-bold text-stone-900 text-sm uppercase tracking-wider">
               {t.contactTitle}
             </h4>
 
             <div className="space-y-3.5 text-xs">
               {/* Branch 1: Indochine Casa */}
-              <div className="p-3.5 rounded-2xl bg-stone-900 border border-stone-800 space-y-2">
-                <span className="text-[11px] font-bold text-amber-400 block uppercase tracking-wider">
+              <div className="p-3.5 rounded-2xl bg-white border border-stone-200/90 shadow-2xs space-y-2">
+                <span className="text-[11px] font-bold text-amber-900 block uppercase tracking-wider">
                   Indochine Casa - 04 Thái Ly
                 </span>
                 <div className="grid grid-cols-4 gap-1">
                   <a
                     href="tel:+84708570838"
-                    className="py-1.5 px-1 rounded-lg bg-stone-800 hover:bg-stone-700 text-white font-bold text-[11px] flex flex-col items-center justify-center gap-0.5 transition-colors"
+                    className="py-1.5 px-1 rounded-lg bg-amber-800 hover:bg-amber-900 text-white font-bold text-[11px] flex flex-col items-center justify-center gap-0.5 transition-colors shadow-2xs"
                     title="Gọi +84 708 570 838"
                   >
-                    <Phone className="w-3.5 h-3.5 text-amber-400" />
+                    <Phone className="w-3.5 h-3.5 text-amber-200" />
                     <span>Hotline</span>
                   </a>
                   <a
                     href="https://zalo.me/0708570838"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="py-1.5 px-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] flex flex-col items-center justify-center gap-0.5 transition-colors"
+                    className="py-1.5 px-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] flex flex-col items-center justify-center gap-0.5 transition-colors shadow-2xs"
                     title="Zalo +84 708 570 838"
                   >
                     <ZaloIcon className="w-3.5 h-3.5" />
@@ -214,7 +214,7 @@ export const Footer: React.FC<FooterProps> = ({
                     href="https://wa.me/84708570838"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="py-1.5 px-1 rounded-lg bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-[11px] flex flex-col items-center justify-center gap-0.5 transition-colors"
+                    className="py-1.5 px-1 rounded-lg bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-[11px] flex flex-col items-center justify-center gap-0.5 transition-colors shadow-2xs"
                     title="WhatsApp +84 708 570 838"
                   >
                     <WhatsAppIcon className="w-3.5 h-3.5" />
@@ -225,7 +225,7 @@ export const Footer: React.FC<FooterProps> = ({
                     onClick={() => {
                       if (onOpenWeChat) onOpenWeChat('indochine');
                     }}
-                    className="py-1.5 px-1 rounded-lg bg-[#07C160] hover:bg-[#059648] text-white font-bold text-[11px] flex flex-col items-center justify-center gap-0.5 transition-colors cursor-pointer"
+                    className="py-1.5 px-1 rounded-lg bg-[#07C160] hover:bg-[#059648] text-white font-bold text-[11px] flex flex-col items-center justify-center gap-0.5 transition-colors cursor-pointer shadow-2xs"
                     title="WeChat: 0708570838"
                   >
                     <WeChatIcon className="w-3.5 h-3.5" />
@@ -235,24 +235,24 @@ export const Footer: React.FC<FooterProps> = ({
               </div>
 
               {/* Branch 2: Chinchu Stay */}
-              <div className="p-3.5 rounded-2xl bg-stone-900 border border-stone-800 space-y-2">
-                <span className="text-[11px] font-bold text-amber-400 block uppercase tracking-wider">
+              <div className="p-3.5 rounded-2xl bg-white border border-stone-200/90 shadow-2xs space-y-2">
+                <span className="text-[11px] font-bold text-amber-900 block uppercase tracking-wider">
                   Chinchu Stay - 46 Nguyễn Cừ & 24 Xuân Thủy
                 </span>
                 <div className="grid grid-cols-4 gap-1">
                   <a
                     href="tel:+84966572935"
-                    className="py-1.5 px-1 rounded-lg bg-stone-800 hover:bg-stone-700 text-white font-bold text-[11px] flex flex-col items-center justify-center gap-0.5 transition-colors"
+                    className="py-1.5 px-1 rounded-lg bg-amber-800 hover:bg-amber-900 text-white font-bold text-[11px] flex flex-col items-center justify-center gap-0.5 transition-colors shadow-2xs"
                     title="Gọi +84 966 572 935"
                   >
-                    <Phone className="w-3.5 h-3.5 text-amber-400" />
+                    <Phone className="w-3.5 h-3.5 text-amber-200" />
                     <span>Hotline</span>
                   </a>
                   <a
                     href="https://zalo.me/0966572935"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="py-1.5 px-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] flex flex-col items-center justify-center gap-0.5 transition-colors"
+                    className="py-1.5 px-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] flex flex-col items-center justify-center gap-0.5 transition-colors shadow-2xs"
                     title="Zalo +84 966 572 935"
                   >
                     <ZaloIcon className="w-3.5 h-3.5" />
@@ -262,7 +262,7 @@ export const Footer: React.FC<FooterProps> = ({
                     href="https://wa.me/84966572935"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="py-1.5 px-1 rounded-lg bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-[11px] flex flex-col items-center justify-center gap-0.5 transition-colors"
+                    className="py-1.5 px-1 rounded-lg bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-[11px] flex flex-col items-center justify-center gap-0.5 transition-colors shadow-2xs"
                     title="WhatsApp +84 966 572 935"
                   >
                     <WhatsAppIcon className="w-3.5 h-3.5" />
@@ -273,7 +273,7 @@ export const Footer: React.FC<FooterProps> = ({
                     onClick={() => {
                       if (onOpenWeChat) onOpenWeChat('chinchu');
                     }}
-                    className="py-1.5 px-1 rounded-lg bg-[#07C160] hover:bg-[#059648] text-white font-bold text-[11px] flex flex-col items-center justify-center gap-0.5 transition-colors cursor-pointer"
+                    className="py-1.5 px-1 rounded-lg bg-[#07C160] hover:bg-[#059648] text-white font-bold text-[11px] flex flex-col items-center justify-center gap-0.5 transition-colors cursor-pointer shadow-2xs"
                     title="WeChat: 0966572935"
                   >
                     <WeChatIcon className="w-3.5 h-3.5" />
@@ -282,19 +282,19 @@ export const Footer: React.FC<FooterProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 text-stone-400 text-[11px] pt-1">
-                <Clock className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+              <div className="flex items-center gap-2 text-stone-500 text-[11px] pt-1">
+                <Clock className="w-3.5 h-3.5 text-amber-700 shrink-0" />
                 <span>{t.reception247Notice}</span>
               </div>
             </div>
 
             {/* Payment & VAT notice */}
-            <div className="pt-3 border-t border-stone-800 text-xs">
-              <span className="font-bold text-stone-200 block mb-1">💳 {t.paymentTitle}</span>
-              <p className="text-stone-400 text-[11px] leading-relaxed mb-1">
+            <div className="pt-3 border-t border-stone-200/90 text-xs">
+              <span className="font-bold text-stone-900 block mb-1">💳 {t.paymentTitle}</span>
+              <p className="text-stone-600 text-[11px] leading-relaxed mb-1">
                 {t.paymentDesc}
               </p>
-              <div className="flex items-center gap-1.5 text-emerald-400 text-[11px] font-medium">
+              <div className="flex items-center gap-1.5 text-emerald-700 text-[11px] font-semibold">
                 <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
                 <span>{t.vatInvoice}</span>
               </div>
@@ -303,26 +303,26 @@ export const Footer: React.FC<FooterProps> = ({
         </div>
 
         {/* SEO Keywords Strip */}
-        <div className="py-6 border-b border-stone-800/80 text-[11px] text-stone-500">
-          <span className="font-semibold text-stone-400 block mb-1.5">{t.seoKeywordsTitle}</span>
+        <div className="py-6 border-b border-stone-200/90 text-[11px] text-stone-500">
+          <span className="font-semibold text-stone-700 block mb-1.5">{t.seoKeywordsTitle}</span>
           <div className="flex flex-wrap gap-x-3 gap-y-1">
-            <span className="hover:text-stone-300">Khách sạn Thảo Điền</span>
+            <span className="hover:text-stone-900">Khách sạn Thảo Điền</span>
             <span>•</span>
-            <span className="hover:text-stone-300">Khách sạn An Khánh Thủ Đức</span>
+            <span className="hover:text-stone-900">Khách sạn An Khánh Thủ Đức</span>
             <span>•</span>
-            <span className="hover:text-stone-300">Indochine Casa Hotel 4 Thái Ly</span>
+            <span className="hover:text-stone-900">Indochine Casa Hotel 4 Thái Ly</span>
             <span>•</span>
-            <span className="hover:text-stone-300">Chinchu Luxury Hotel 46 Nguyễn Cừ</span>
+            <span className="hover:text-stone-900">Chinchu Luxury Hotel 46 Nguyễn Cừ</span>
             <span>•</span>
-            <span className="hover:text-stone-300">Chinchu Stay 24 Xuân Thủy</span>
+            <span className="hover:text-stone-900">Chinchu Stay 24 Xuân Thủy</span>
             <span>•</span>
-            <span className="hover:text-stone-300">Khách sạn có bồn tắm Thảo Điền</span>
+            <span className="hover:text-stone-900">Khách sạn có bồn tắm Thảo Điền</span>
             <span>•</span>
-            <span className="hover:text-stone-300">Khách sạn nghỉ đêm Thảo Điền giá tốt</span>
+            <span className="hover:text-stone-900">Khách sạn nghỉ đêm Thảo Điền giá tốt</span>
             <span>•</span>
-            <span className="hover:text-stone-300">Boutique Hotel Thao Dien Saigon</span>
+            <span className="hover:text-stone-900">Boutique Hotel Thao Dien Saigon</span>
             <span>•</span>
-            <span className="hover:text-stone-300">Khách sạn gần Ga Metro Thảo Điền</span>
+            <span className="hover:text-stone-900">Khách sạn gần Ga Metro Thảo Điền</span>
           </div>
         </div>
 

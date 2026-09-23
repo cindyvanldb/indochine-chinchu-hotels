@@ -140,27 +140,27 @@ export const Hero: React.FC<HeroProps> = ({
   };
 
   return (
-    <section className="relative overflow-hidden bg-stone-950 text-white pt-8 pb-16 lg:pt-14 lg:pb-24">
-      {/* Background Hero Image with Dark Gradient Overlay */}
-      <div className="absolute inset-0 z-0">
+    <section className="relative overflow-hidden bg-[#FAF8F5] text-stone-900 pt-8 pb-16 lg:pt-14 lg:pb-24 border-b border-stone-200/80">
+      {/* Background Hero Image with Soft Luminous Classic Scrim */}
+      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
         <img
           src={getAssetUrl(activeHotel.heroImage)}
           alt={activeHotel.name}
-          className="w-full h-full object-cover object-center scale-105 transition-all duration-1000 ease-out filter brightness-45"
+          className="w-full h-full object-cover object-center scale-105 transition-all duration-1000 ease-out filter brightness-105 contrast-95"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/70 to-stone-900/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF8F5]/40 via-[#FAF8F5]/70 to-[#FAF8F5]" />
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
         {/* Top Badges */}
         <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-semibold backdrop-blur-md">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100/90 border border-amber-300/80 text-amber-900 text-xs font-bold shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5 text-amber-700" />
             <span>{t.badge}</span>
           </div>
 
-          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-stone-900/80 border border-stone-700 text-stone-200 text-xs font-medium backdrop-blur-md">
-            <div className="flex text-amber-400">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 border border-stone-200/90 text-stone-800 text-xs font-semibold shadow-2xs backdrop-blur-md">
+            <div className="flex text-amber-500">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-3.5 h-3.5 fill-current" />
               ))}
@@ -171,10 +171,10 @@ export const Hero: React.FC<HeroProps> = ({
 
         {/* Main Hero Typography */}
         <div className="max-w-3xl mx-auto mb-8 flex flex-col items-center">
-          <h1 className="font-serif-luxury text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-tight mb-4">
+          <h1 className="font-serif-luxury text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-stone-900 leading-tight mb-4">
             {t.mainTitle}
           </h1>
-          <p className="text-stone-300 text-base sm:text-lg leading-relaxed font-light mb-6 max-w-2xl">
+          <p className="text-stone-700 text-base sm:text-lg leading-relaxed font-normal mb-6 max-w-2xl">
             {t.subTitle}
           </p>
 
@@ -190,8 +190,8 @@ export const Hero: React.FC<HeroProps> = ({
                   onClick={() => onSelectHotel(h.id)}
                   className={`group relative p-4 sm:p-4.5 rounded-2xl text-left transition-all duration-200 cursor-pointer flex flex-col justify-center backdrop-blur-md ${
                     isSelected
-                      ? 'bg-gradient-to-b from-stone-900/95 via-amber-950/80 to-stone-900/95 border-2 border-amber-400 text-white shadow-xl shadow-amber-950/60 ring-2 ring-amber-400/30 scale-[1.02]'
-                      : 'bg-stone-900/80 hover:bg-stone-800/90 border border-stone-700/80 text-stone-300 hover:text-white hover:border-amber-600/50 shadow-md'
+                      ? 'bg-gradient-to-b from-amber-50/90 via-white to-amber-50/70 border-2 border-amber-600 text-stone-900 shadow-xl shadow-amber-900/10 ring-2 ring-amber-500/25 scale-[1.02]'
+                      : 'bg-white/90 hover:bg-white border border-stone-200/90 text-stone-700 hover:text-stone-900 hover:border-amber-600/50 shadow-sm hover:shadow-md'
                   }`}
                 >
                   <div className="w-full">
@@ -201,13 +201,13 @@ export const Hero: React.FC<HeroProps> = ({
                         <span
                           className={`w-2 h-2 rounded-full shrink-0 transition-colors ${
                             isSelected
-                              ? 'bg-amber-400 ring-2 ring-amber-300 animate-pulse'
-                              : 'bg-stone-600 group-hover:bg-amber-400'
+                              ? 'bg-amber-600 ring-2 ring-amber-400 animate-pulse'
+                              : 'bg-stone-300 group-hover:bg-amber-500'
                           }`}
                         />
                         <span
-                          className={`text-[11px] font-semibold tracking-wider uppercase ${
-                            isSelected ? 'text-amber-300' : 'text-stone-400'
+                          className={`text-[11px] font-bold tracking-wider uppercase ${
+                            isSelected ? 'text-amber-800' : 'text-stone-500'
                           }`}
                         >
                           {getBranchBadge(h.id)}
@@ -215,20 +215,20 @@ export const Hero: React.FC<HeroProps> = ({
                       </div>
 
                       {isSelected && (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/40">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300/80">
                           {t.selectedBadge}
                         </span>
                       )}
                     </div>
 
                     {/* Hotel Name */}
-                    <div className="font-bold text-sm sm:text-base text-white tracking-tight leading-snug mb-1.5">
+                    <div className="font-bold text-sm sm:text-base text-stone-900 tracking-tight leading-snug mb-1.5">
                       {h.name}
                     </div>
 
                     {/* Address */}
-                    <div className="text-xs text-stone-300/85 flex items-center gap-1.5 font-light">
-                      <span className="text-amber-400/90">📍</span>
+                    <div className="text-xs text-stone-600 flex items-center gap-1.5 font-normal">
+                      <span className="text-amber-700">📍</span>
                       <span>{h.address} • Thảo Điền</span>
                     </div>
                   </div>
@@ -241,44 +241,44 @@ export const Hero: React.FC<HeroProps> = ({
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md mb-8">
             <button
               onClick={() => onOpenBooking(selectedHotelId)}
-              className="w-full sm:w-auto flex-1 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-700 to-amber-900 hover:from-amber-800 hover:to-stone-900 text-white font-bold text-sm shadow-xl flex items-center justify-center gap-2 transition-all cursor-pointer"
+              className="w-full sm:w-auto flex-1 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-700 to-amber-800 hover:from-amber-800 hover:to-amber-900 text-white font-bold text-sm shadow-md hover:shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
-              <Phone className="w-4 h-4 text-amber-300" />
+              <Phone className="w-4 h-4 text-amber-200" />
               <span>{t.ctaSearch}</span>
             </button>
             <a
               href="#rooms"
-              className="w-full sm:w-auto flex-1 py-3.5 px-6 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm backdrop-blur-md flex items-center justify-center gap-2 transition-colors"
+              className="w-full sm:w-auto flex-1 py-3.5 px-6 rounded-2xl bg-white hover:bg-stone-100 border border-stone-300 text-stone-800 font-bold text-sm shadow-xs flex items-center justify-center gap-2 transition-colors"
             >
               <span>{t.ctaViewRooms}</span>
-              <ArrowRight className="w-4 h-4 text-amber-300" />
+              <ArrowRight className="w-4 h-4 text-amber-700" />
             </a>
           </div>
 
           {/* 2 Quick Multi-channel Contact Badges (Hotline, Zalo, WhatsApp, WeChat) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8 w-full max-w-2xl text-left">
             {/* Branch 1: Indochine Casa */}
-            <div className="bg-stone-900/90 border border-emerald-800/60 rounded-2xl p-3.5 backdrop-blur-md flex flex-col justify-between">
+            <div className="bg-white/95 border border-stone-200/90 shadow-sm hover:shadow-md rounded-2xl p-3.5 backdrop-blur-md flex flex-col justify-between">
               <div>
-                <div className="text-amber-400 font-bold text-xs uppercase tracking-wider mb-1">
+                <div className="text-amber-900 font-bold text-xs uppercase tracking-wider mb-1">
                   {t.branch1Title}
                 </div>
-                <div className="text-[11px] text-stone-300 mb-3">{t.branchLocation}</div>
+                <div className="text-[11px] text-stone-600 mb-3">{t.branchLocation}</div>
               </div>
               <div className="grid grid-cols-2 gap-1.5">
                 <a
                   href="tel:+84708570838"
-                  className="py-1.5 px-2 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  className="py-1.5 px-2 rounded-xl bg-amber-800 hover:bg-amber-900 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs"
                   title="Gọi +84 708 570 838"
                 >
-                  <Phone className="w-3.5 h-3.5 text-amber-300" />
+                  <Phone className="w-3.5 h-3.5 text-amber-200" />
                   <span>+84 708 570 838</span>
                 </a>
                 <a
                   href="https://zalo.me/0708570838"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-1.5 px-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  className="py-1.5 px-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs"
                   title="Zalo +84 708 570 838"
                 >
                   <ZaloIcon className="w-3.5 h-3.5" />
@@ -288,7 +288,7 @@ export const Hero: React.FC<HeroProps> = ({
                   href="https://wa.me/84708570838"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-1.5 px-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  className="py-1.5 px-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs"
                   title="WhatsApp +84 708 570 838"
                 >
                   <WhatsAppIcon className="w-3.5 h-3.5" />
@@ -299,7 +299,7 @@ export const Hero: React.FC<HeroProps> = ({
                   onClick={() => {
                     if (onOpenWeChat) onOpenWeChat('indochine');
                   }}
-                  className="py-1.5 px-2 rounded-xl bg-[#07C160] hover:bg-[#059648] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  className="py-1.5 px-2 rounded-xl bg-[#07C160] hover:bg-[#059648] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
                   title="WeChat ID: 0708570838"
                 >
                   <WeChatIcon className="w-3.5 h-3.5" />
@@ -309,27 +309,27 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
 
             {/* Branch 2: Chinchu Stay */}
-            <div className="bg-stone-900/90 border border-emerald-800/60 rounded-2xl p-3.5 backdrop-blur-md flex flex-col justify-between">
+            <div className="bg-white/95 border border-stone-200/90 shadow-sm hover:shadow-md rounded-2xl p-3.5 backdrop-blur-md flex flex-col justify-between">
               <div>
-                <div className="text-amber-400 font-bold text-xs uppercase tracking-wider mb-1">
+                <div className="text-amber-900 font-bold text-xs uppercase tracking-wider mb-1">
                   {t.branch2Title}
                 </div>
-                <div className="text-[11px] text-stone-300 mb-3">{t.branchLocation}</div>
+                <div className="text-[11px] text-stone-600 mb-3">{t.branchLocation}</div>
               </div>
               <div className="grid grid-cols-2 gap-1.5">
                 <a
                   href="tel:+84966572935"
-                  className="py-1.5 px-2 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  className="py-1.5 px-2 rounded-xl bg-amber-800 hover:bg-amber-900 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs"
                   title="Gọi +84 966 572 935"
                 >
-                  <Phone className="w-3.5 h-3.5 text-amber-300" />
+                  <Phone className="w-3.5 h-3.5 text-amber-200" />
                   <span>+84 966 572 935</span>
                 </a>
                 <a
                   href="https://zalo.me/0966572935"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-1.5 px-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  className="py-1.5 px-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs"
                   title="Zalo +84 966 572 935"
                 >
                   <ZaloIcon className="w-3.5 h-3.5" />
@@ -339,7 +339,7 @@ export const Hero: React.FC<HeroProps> = ({
                   href="https://wa.me/84966572935"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-1.5 px-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  className="py-1.5 px-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs"
                   title="WhatsApp +84 966 572 935"
                 >
                   <WhatsAppIcon className="w-3.5 h-3.5" />
@@ -350,7 +350,7 @@ export const Hero: React.FC<HeroProps> = ({
                   onClick={() => {
                     if (onOpenWeChat) onOpenWeChat('chinchu');
                   }}
-                  className="py-1.5 px-2 rounded-xl bg-[#07C160] hover:bg-[#059648] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  className="py-1.5 px-2 rounded-xl bg-[#07C160] hover:bg-[#059648] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
                   title="WeChat ID: 0966572935"
                 >
                   <WeChatIcon className="w-3.5 h-3.5" />
@@ -361,21 +361,21 @@ export const Hero: React.FC<HeroProps> = ({
           </div>
 
           {/* Value Props Strip */}
-          <div className="pt-4 border-t border-stone-800/80 grid grid-cols-2 md:grid-cols-4 gap-3 text-xs text-stone-300 w-full max-w-2xl">
+          <div className="pt-4 border-t border-stone-200/90 grid grid-cols-2 md:grid-cols-4 gap-3 text-xs text-stone-700 w-full max-w-2xl">
             <div className="flex items-center justify-center sm:justify-start gap-1.5">
-              <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span className="font-semibold text-stone-100">{t.perk1}</span>
+              <Check className="w-4 h-4 text-emerald-700 shrink-0" />
+              <span className="font-semibold text-stone-900">{t.perk1}</span>
             </div>
             <div className="flex items-center justify-center sm:justify-start gap-1.5">
-              <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+              <Check className="w-4 h-4 text-emerald-700 shrink-0" />
               <span>{t.perk2}</span>
             </div>
             <div className="flex items-center justify-center sm:justify-start gap-1.5">
-              <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+              <Check className="w-4 h-4 text-emerald-700 shrink-0" />
               <span>{t.perk3}</span>
             </div>
             <div className="flex items-center justify-center sm:justify-start gap-1.5">
-              <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+              <Check className="w-4 h-4 text-emerald-700 shrink-0" />
               <span>{t.perk4}</span>
             </div>
           </div>
